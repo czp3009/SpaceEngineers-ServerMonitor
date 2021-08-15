@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<PluginManifest>
+    <Name>ServerMonitor</Name>
+    <Guid>dafee7d1-968b-48f9-9274-7c085d74afea</Guid>
+    <Repository>https://github.com/czp3009/SpaceEngineers-ServerMonitor</Repository>
+    <Version>v0.0.0.1</Version>
+</PluginManifest>
