@@ -94,6 +94,9 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
+        <EmbeddedResource Include="Web\FrontEnd\*.*"/>
+    </ItemGroup>
+    <ItemGroup>
         <Content Include="manifest.xml" CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
