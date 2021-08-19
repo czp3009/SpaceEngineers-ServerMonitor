@@ -24,10 +24,13 @@ namespace ServerMonitor.Web.BackEnd
             if (request.HttpMethod != "GET") return false;
             var uri = request.Url;
             var path = uri.AbsolutePath;
+            //index.html
+            if (path == "/") path = "/index.html";
+            //try get resource file
             Stream stream = null;
             try
             {
-                var name = $"ServerMonitor.Web.FrontEnd{path.Replace('/', '.')}";
+                var name = $"ServerMonitor.Web.FrontEnd.dist{path.Replace('/', '.')}";
                 stream = _assembly.GetManifestResourceStream(name);
             }
             catch (Exception)

@@ -94,7 +94,7 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Web\FrontEnd\*.*"/>
+        <EmbeddedResource Include="Web\FrontEnd\dist\*.*"/>
     </ItemGroup>
     <ItemGroup>
         <Content Include="manifest.xml" CopyToOutputDirectory="PreserveNewest"/>
