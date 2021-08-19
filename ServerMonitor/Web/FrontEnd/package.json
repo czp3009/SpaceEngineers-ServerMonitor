@@ -1,0 +1,21 @@
+{
+  "name": "space-engineers-server-monitor-front-end",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/czp3009/SpaceEngineers-ServerMonitor",
+  "author": "czp3009@gmail.com",
+  "license": "Apache License 2.0",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0"
+  },
+  "scripts": {
+    "start": "parcel public/index.html",
+    "build": "parcel build public/index.html"
+  }
+}
