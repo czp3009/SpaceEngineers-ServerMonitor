@@ -2,12 +2,14 @@
 
 namespace ServerMonitor.Web.BackEnd
 {
-    public static class RequestHandlerHolder
+    public class RequestHandlerHolder
     {
-        public static readonly List<IRequestHandler> RequestHandlers = new List<IRequestHandler>
+        public readonly List<IRequestHandler> RequestHandlers = new List<IRequestHandler>();
+
+        public RequestHandlerHolder()
         {
-            new ControllerRequestHandler(),
-            new StaticResourceRequestHandler()
-        };
+            RequestHandlers.Add(new ControllerRequestHandler());
+            RequestHandlers.Add(new StaticResourceRequestHandler());
+        }
     }
 }

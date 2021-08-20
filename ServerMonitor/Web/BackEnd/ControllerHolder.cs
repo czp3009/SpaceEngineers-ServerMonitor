@@ -6,12 +6,15 @@ using ServerMonitor.Web.BackEnd.Controller;
 
 namespace ServerMonitor.Web.BackEnd
 {
-    public static class ControllerHolder
+    public class ControllerHolder
     {
-        public static readonly Dictionary<string, Func<HttpListenerRequest, Task<object>>> Controllers =
-            new Dictionary<string, Func<HttpListenerRequest, Task<object>>>
-            {
-                { "/basicInfo", BasicInfoController.GetBasicInfo }
-            };
+        public readonly Dictionary<string, Func<HttpListenerRequest, Task<object>>> ControllerMethods =
+            new Dictionary<string, Func<HttpListenerRequest, Task<object>>>();
+
+        public ControllerHolder()
+        {
+            var basicInfoController = new BasicInfoController();
+            ControllerMethods["/basicInfo"] = basicInfoController.GetBasicInfo;
+        }
     }
 }

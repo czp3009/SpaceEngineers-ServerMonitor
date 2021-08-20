@@ -6,9 +6,9 @@ using ServerMonitor.Web.BackEnd.Model;
 
 namespace ServerMonitor.Web.BackEnd.Controller
 {
-    public static class BasicInfoController
+    public class BasicInfoController
     {
-        public static async Task<object> GetBasicInfo(HttpListenerRequest request)
+        public async Task<object> GetBasicInfo(HttpListenerRequest request)
         {
             var mySession = MySession.Static;
             return new ServerStatus(

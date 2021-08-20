@@ -8,6 +8,7 @@ namespace ServerMonitor.Web.BackEnd
     public class HttpServer
     {
         private readonly HttpListener _httpListener = new HttpListener();
+        private readonly RequestHandlerHolder _requestHandlerHolder = new RequestHandlerHolder();
 
         public HttpServer(ushort port = 5000)
         {
@@ -34,7 +35,7 @@ namespace ServerMonitor.Web.BackEnd
                 try
                 {
                     var context = await _httpListener.GetContextAsync();
-                    if (RequestHandlerHolder.RequestHandlers.Any(it => it.TryHandle(context)))
+                    if (_requestHandlerHolder.RequestHandlers.Any(it => it.TryHandle(context)))
                     {
                         continue;
                     }

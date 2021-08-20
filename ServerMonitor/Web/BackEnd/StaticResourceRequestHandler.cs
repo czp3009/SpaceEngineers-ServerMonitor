@@ -24,20 +24,8 @@ namespace ServerMonitor.Web.BackEnd
             if (request.HttpMethod != "GET") return false;
             var uri = request.Url;
             var path = uri.AbsolutePath;
-            //index.html
-            if (path == "/") path = "/index.html";
-            //try get resource file
-            Stream stream = null;
-            try
-            {
-                var name = $"ServerMonitor.Web.FrontEnd.dist{path.Replace('/', '.')}";
-                stream = _assembly.GetManifestResourceStream(name);
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
+            //fallback all request to index.html for SPA
+            var stream = GetResourceFileStream(path) ?? GetResourceFileStream("/index.html");
             if (stream == null) return false;
 
             async void Handle()
@@ -62,6 +50,21 @@ namespace ServerMonitor.Web.BackEnd
             Handle();
 
             return true;
+        }
+
+        private Stream GetResourceFileStream(string path)
+        {
+            try
+            {
+                var name = $"ServerMonitor.Web.FrontEnd.dist{path.Replace('/', '.')}";
+                return _assembly.GetManifestResourceStream(name);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return null;
         }
 
         private static string TryGetContentType(string fileName)

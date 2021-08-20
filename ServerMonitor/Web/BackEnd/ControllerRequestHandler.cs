@@ -9,12 +9,13 @@ namespace ServerMonitor.Web.BackEnd
 {
     public class ControllerRequestHandler : IRequestHandler
     {
+        private readonly ControllerHolder _controllerHolder = new ControllerHolder();
         private static Logger Log => ServerMonitorPlugin.Log;
 
         public bool TryHandle(HttpListenerContext context)
         {
             var request = context.Request;
-            if (!ControllerHolder.Controllers.TryGetValue(request.Url.AbsolutePath, out var handler))
+            if (!_controllerHolder.ControllerMethods.TryGetValue(request.Url.AbsolutePath, out var handler))
             {
                 return false;
             }
