@@ -43,6 +43,17 @@ namespace ServerMonitor.Web.BackEnd
                 }
 
                 var response = context.Response;
+
+#if DEBUG
+                //cors for local debug
+                if (request.Url.Host == "localhost")
+                {
+                    var uri = request.UrlReferrer;
+                    response.Headers["Access-Control-Allow-Origin"] = $"{uri.Scheme}://{uri.Authority}";
+                }
+#endif
+
+                //generate exception response body
                 if (exception != null)
                 {
                     HttpStatusCode statesCode;
@@ -59,6 +70,7 @@ namespace ServerMonitor.Web.BackEnd
                     result = new HttpResponse(statesCode, exception);
                 }
 
+                //write result to response stream
                 if (result != null)
                 {
                     response.ContentType = "application/json";

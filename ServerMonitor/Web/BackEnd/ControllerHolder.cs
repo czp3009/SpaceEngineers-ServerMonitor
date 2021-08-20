@@ -14,7 +14,7 @@ namespace ServerMonitor.Web.BackEnd
         public ControllerHolder()
         {
             var basicInfoController = new BasicInfoController();
-            ControllerMethods["/basicInfo"] = basicInfoController.GetBasicInfo;
+            ControllerMethods["/api/basicInfo"] = basicInfoController.GetBasicInfo;
         }
     }
 }
