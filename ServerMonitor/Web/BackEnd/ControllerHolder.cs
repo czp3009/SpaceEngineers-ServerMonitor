@@ -15,6 +15,10 @@ namespace ServerMonitor.Web.BackEnd
         {
             var basicInfoController = new BasicInfoController();
             ControllerMethods[("GET", "/api/basicInfo")] = basicInfoController.GetBasicInfo;
+
+            var lagGridBroadcasterController = new LagGridBroadcasterController();
+            ControllerMethods[("GET", "/api/thirdParty/lagGridBroadcaster/latestMeasureResult")] =
+                lagGridBroadcasterController.GetLatestMeasureResult;
         }
     }
 }

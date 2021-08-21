@@ -69,12 +69,20 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Reference Include="LagGridBroadcaster">
+            <HintPath>$(SolutionDir)\ThirdPartyPlugin\LagGridBroadcaster\LagGridBroadcaster.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
         <Compile Include="ServerMonitorConfig.cs"/>
         <Compile Include="ServerMonitorPlugin.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="ThirdPartyPluginReference.cs"/>
         <Compile Include="Web\BackEnd\ControllerHolder.cs"/>
         <Compile Include="Web\BackEnd\ControllerRequestHandler.cs"/>
         <Compile Include="Web\BackEnd\Controller\BasicInfoController.cs"/>
+        <Compile Include="Web\BackEnd\Controller\LagGridBroadcasterController.cs"/>
         <Compile Include="Web\BackEnd\HttpException\HttpStatusException.cs"/>
         <Compile Include="Web\BackEnd\HttpServer.cs"/>
         <Compile Include="Web\BackEnd\Model\HttpResponse.cs"/>
@@ -99,7 +107,11 @@
         <Content Include="manifest.xml" CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-    <Target Name="Zip" BeforeTargets="AfterBuild" Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <Target Name="DebugZip" BeforeTargets="AfterBuild" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <MakeDir Directories="$(MSBuildProjectDirectory)\zip"/>
+        <ZipDirectory SourceDirectory="$(OutputPath)" DestinationFile="$(SolutionDir)\TorchBinaries\Plugins\$(MSBuildProjectName).zip" Overwrite="true"/>
+    </Target>
+    <Target Name="ReleaseZip" BeforeTargets="AfterBuild" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <MakeDir Directories="$(MSBuildProjectDirectory)\zip"/>
         <ZipDirectory SourceDirectory="$(OutputPath)" DestinationFile="$(MSBuildProjectDirectory)\zip\$(MSBuildProjectName).zip" Overwrite="true"/>
     </Target>
