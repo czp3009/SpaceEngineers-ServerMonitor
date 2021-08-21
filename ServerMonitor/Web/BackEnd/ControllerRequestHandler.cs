@@ -15,7 +15,8 @@ namespace ServerMonitor.Web.BackEnd
         public bool TryHandle(HttpListenerContext context)
         {
             var request = context.Request;
-            if (!_controllerHolder.ControllerMethods.TryGetValue(request.Url.AbsolutePath, out var handler))
+            if (!_controllerHolder.ControllerMethods.TryGetValue((request.HttpMethod, request.Url.AbsolutePath),
+                out var handler))
             {
                 return false;
             }
@@ -42,37 +43,41 @@ namespace ServerMonitor.Web.BackEnd
                     Log.Error(e);
                 }
 
-                var response = context.Response;
+                HttpListenerResponse response = null;
+                try
+                {
+                    response = context.Response;
 
 #if DEBUG
-                //cors for local debug
-                if (request.Url.Host == "localhost")
-                {
-                    var uri = request.UrlReferrer;
-                    response.Headers["Access-Control-Allow-Origin"] = $"{uri.Scheme}://{uri.Authority}";
-                }
+                    //cors for local debug
+                    if (request.Url.Host == "localhost")
+                    {
+                        var uri = request.UrlReferrer;
+                        if (uri != null)
+                        {
+                            response.Headers["Access-Control-Allow-Origin"] = $"{uri.Scheme}://{uri.Authority}";
+                        }
+                    }
 #endif
-
-                //generate exception response body
-                if (exception != null)
-                {
-                    HttpStatusCode statesCode;
-                    if (exception is HttpStatusException statusException)
+                    //generate exception response body
+                    if (exception != null)
                     {
-                        statesCode = statusException.Code;
-                    }
-                    else
-                    {
-                        statesCode = HttpStatusCode.InternalServerError;
+                        HttpStatusCode statesCode;
+                        if (exception is HttpStatusException statusException)
+                        {
+                            statesCode = statusException.Code;
+                        }
+                        else
+                        {
+                            statesCode = HttpStatusCode.InternalServerError;
+                        }
+
+                        response.StatusCode = (int)statesCode;
+                        result = new HttpResponse(statesCode, exception);
                     }
 
-                    response.StatusCode = (int)statesCode;
-                    result = new HttpResponse(statesCode, exception);
-                }
-
-                //write result to response stream
-                if (result != null)
-                {
+                    //write result to response stream
+                    if (result == null) return;
                     response.ContentType = "application/json";
                     var json = JsonConvert.SerializeObject(result);
                     var buffer = System.Text.Encoding.UTF8.GetBytes(json);
@@ -81,11 +86,21 @@ namespace ServerMonitor.Web.BackEnd
                     await outputStream.WriteAsync(buffer, 0, buffer.Length);
                     outputStream.Close();
                 }
-
-                response.Close();
+                catch (HttpListenerException)
+                {
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+                finally
+                {
+                    response?.Close();
+                }
             }
 
             Handle();
+
             return true;
         }
     }

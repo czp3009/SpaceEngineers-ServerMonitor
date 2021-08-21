@@ -8,13 +8,13 @@ namespace ServerMonitor.Web.BackEnd
 {
     public class ControllerHolder
     {
-        public readonly Dictionary<string, Func<HttpListenerRequest, Task<object>>> ControllerMethods =
-            new Dictionary<string, Func<HttpListenerRequest, Task<object>>>();
+        public readonly Dictionary<(string, string), Func<HttpListenerRequest, Task<object>>> ControllerMethods =
+            new Dictionary<(string, string), Func<HttpListenerRequest, Task<object>>>();
 
         public ControllerHolder()
         {
             var basicInfoController = new BasicInfoController();
-            ControllerMethods["/api/basicInfo"] = basicInfoController.GetBasicInfo;
+            ControllerMethods[("GET", "/api/basicInfo")] = basicInfoController.GetBasicInfo;
         }
     }
 }

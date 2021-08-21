@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using NLog;
 
 namespace ServerMonitor.Web.BackEnd
 {
@@ -17,6 +18,7 @@ namespace ServerMonitor.Web.BackEnd
         };
 
         private readonly Assembly _assembly = Assembly.GetExecutingAssembly();
+        private static Logger Log => ServerMonitorPlugin.Log;
 
         public bool TryHandle(HttpListenerContext context)
         {
@@ -30,20 +32,29 @@ namespace ServerMonitor.Web.BackEnd
 
             async void Handle()
             {
-                var response = context.Response;
-                var contentType = TryGetContentType(uri.Segments.Last());
-                if (contentType != null) response.ContentType = contentType;
-                response.ContentLength64 = stream.Length;
-                var outputStream = response.OutputStream;
+                HttpListenerResponse response = null;
+                Stream outputStream = null;
                 try
                 {
+                    response = context.Response;
+                    var contentType = TryGetContentType(uri.Segments.Last());
+                    if (contentType != null) response.ContentType = contentType;
+                    response.ContentLength64 = stream.Length;
+                    outputStream = response.OutputStream;
                     await stream.CopyToAsync(outputStream);
+                }
+                catch (HttpListenerException)
+                {
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
                 }
                 finally
                 {
                     stream.Close();
-                    outputStream.Close();
-                    response.Close();
+                    outputStream?.Close();
+                    response?.Close();
                 }
             }
 
