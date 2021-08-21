@@ -78,7 +78,6 @@
         <Compile Include="Web\BackEnd\HttpException\HttpStatusException.cs"/>
         <Compile Include="Web\BackEnd\HttpServer.cs"/>
         <Compile Include="Web\BackEnd\Model\HttpResponse.cs"/>
-        <Compile Include="Web\BackEnd\Model\ServerStatus.cs"/>
         <Compile Include="Web\BackEnd\RequestHandler.cs"/>
         <Compile Include="Web\BackEnd\RequestHandlerHolder.cs"/>
         <Compile Include="Web\BackEnd\StaticResourceRequestHandler.cs"/>
