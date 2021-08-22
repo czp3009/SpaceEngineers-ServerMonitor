@@ -1,13 +1,14 @@
-import React from "react";
+import React from 'react';
 import ReactDOM from "react-dom";
-import {Button} from "@material-ui/core";
+import {CssBaseline} from "@material-ui/core";
+import {ThemeProvider} from "@material-ui/core/styles";
+import theme from "./theme";
+import App from "./App";
 
-function App() {
-    return (
-        <Button variant="contained" color="primary">
-            hello,world
-        </Button>
-    );
-}
-
-ReactDOM.render(<App/>, document.getElementById("root"));
+ReactDOM.render(
+    <ThemeProvider theme={theme}>
+        <CssBaseline/>
+        <App/>
+    </ThemeProvider>,
+    document.getElementById("root")
+)
