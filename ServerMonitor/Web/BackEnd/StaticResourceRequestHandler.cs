@@ -14,7 +14,8 @@ namespace ServerMonitor.Web.BackEnd
         {
             { "html", "text/html" },
             { "js", "application/x-javascript" },
-            { "map", "application/json" }
+            { "map", "application/json" },
+            { "png", "image/png" }
         };
 
         private readonly Assembly _assembly = Assembly.GetExecutingAssembly();
