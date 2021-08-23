@@ -76,12 +76,24 @@ namespace ServerMonitor
             {
                 httpServer.Start();
             }
-            catch (HttpListenerException)
+            catch (HttpListenerException e)
             {
-                Log.Error(
-                    $"Can't listen on port {port}. Please run dedicated server in administrator mode or execute follwing command in shell:\n" +
-                    $"netsh http add urlacl url=http://*:{port}/ user={Environment.UserDomainName}\\{Environment.UserName}"
-                );
+                switch (e.ErrorCode)
+                {
+                    case 32:
+                        Log.Error($"Port {port} is being used by another process");
+                        break;
+                    case 5:
+                        Log.Error(
+                            $"Permission denied for listen on port {port}. Please run dedicated server in administrator mode or execute follwing command in shell:\n" +
+                            $"netsh http add urlacl url=http://*:{port}/ user={Environment.UserDomainName}\\{Environment.UserName}"
+                        );
+                        break;
+                    default:
+                        Log.Error(e);
+                        break;
+                }
+
                 return;
             }
 
