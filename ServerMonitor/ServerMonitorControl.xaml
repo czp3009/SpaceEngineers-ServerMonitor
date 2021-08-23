@@ -22,22 +22,31 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5" Text="BasicSettings:" />
 
         <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5" Text="Port" />
         <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Text="{Binding Port}" />
+        
+        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5" Text="MOTD" />
+        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" 
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Visible"
+                 Height="100"
+                 Text="{Binding MessageOfToday}" />
 
-        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5" Text="ThirdPartyPlugins:" />
+        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5" Text="ThirdPartyPlugins:" />
 
-        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5" Text="LagGridBroadcaster" />
-        <CheckBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="5"
+        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="5" Text="LagGridBroadcaster" />
+        <CheckBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="5"
                   IsChecked="{Binding LagGridBroadcasterPluginSupport}"
                   IsEnabled="{Binding LagGridBroadcasterPluginEnabled}"/>
 
-        <Button Grid.Row="4" Grid.Column="2" Content="Save Config" Margin="5" Click="SaveButton_OnClick" />
+        <Button Grid.Row="5" Grid.Column="2" Content="Save Config" Margin="5" Click="SaveButton_OnClick" />
 
-        <Button Grid.Row="5" Grid.Column="2" Content="Restart HttpServer" Margin="5" Click="RestartHttpServer_OnClick" />
+        <Button Grid.Row="6" Grid.Column="2" Content="Restart HttpServer" Margin="5" Click="RestartHttpServer_OnClick" />
     </Grid>
 </UserControl>

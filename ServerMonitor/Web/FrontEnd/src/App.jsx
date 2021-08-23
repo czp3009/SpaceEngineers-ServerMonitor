@@ -38,12 +38,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     drawer: {
         zIndex: `${theme.zIndex.drawer} !important`,
     },
-    drawerHeader: {
-        minHeight: theme.mixins.toolbar.minHeight
-    },
     drawerList: {
         width: 250,
-        paddingTop: theme.spacing(2)
+        paddingTop: theme.mixins.toolbar.minHeight + theme.spacing(2)
     }
 }))
 
@@ -74,7 +71,6 @@ export default function () {
                 <Drawer className={classes.drawer} anchor="left" open={drawerOpened}
                         onClose={() => setDrawerOpened(false)}
                 >
-                    <div className={classes.drawerHeader}/>
                     <List className={classes.drawerList} onClick={() => setDrawerOpened(false)}>
                         <ListItem button component={RouterLink} to="/">
                             <ListItemIcon>
@@ -85,14 +81,16 @@ export default function () {
                     </List>
                 </Drawer>
 
-                <Switch>
-                    <Route path="/" exact>
-                        <HomePage/>
-                    </Route>
-                    <Route>
-                        <NotFoundPage/>
-                    </Route>
-                </Switch>
+                <main>
+                    <Switch>
+                        <Route path="/" exact>
+                            <HomePage/>
+                        </Route>
+                        <Route>
+                            <NotFoundPage/>
+                        </Route>
+                    </Switch>
+                </main>
             </div>
         </Router>
     )
