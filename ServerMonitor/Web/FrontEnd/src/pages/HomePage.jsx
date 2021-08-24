@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {Container, Grid, makeStyles, Paper, Theme, Typography} from "@material-ui/core";
-import type {ServerBasicInfo} from "../api/BasicInfoApi";
-import BasicInfoApi from "../api/BasicInfoApi";
+import {Box, Container, Grid, makeStyles, Paper, Theme, Typography} from "@material-ui/core";
+import type {ServerBasicInfo} from "../apis/BasicInfoApi";
+import BasicInfoApi from "../apis/BasicInfoApi";
 import MessageIcon from "@material-ui/icons/Message";
 import StorageIcon from "@material-ui/icons/Storage";
 import LoadingPage from "./LoadingPage";
@@ -20,20 +20,19 @@ export default function () {
     const classes = useStyles()
     const [serverBasicInfo: ServerBasicInfo, setServerBasicInfo] = useState(null)
     const [fetchError: Error, setFetchError] = useState(null)
-
-    function fetchData() {
-        setFetchError(null)
-        setServerBasicInfo(null)
-        BasicInfoApi.getBasicInfo().then(setServerBasicInfo).catch(setFetchError)
-    }
+    const [fetchRetryEvent, setFetchRetryEvent] = useState(null)
 
     useEffect(() => {
         if (serverBasicInfo != null) return
-        fetchData()
-    }, [])
+        BasicInfoApi.getBasicInfo().then(setServerBasicInfo).catch(setFetchError)
+        return () => {
+            setServerBasicInfo(null)
+            setFetchError(null)
+        }
+    }, [fetchRetryEvent])
 
     if (fetchError != null) {
-        return <NetworkErrorPage error={fetchError} callback={fetchData}/>
+        return <NetworkErrorPage error={fetchError} callback={setFetchRetryEvent}/>
     }
 
     if (serverBasicInfo == null) {
@@ -41,7 +40,7 @@ export default function () {
     }
 
     return (
-        <div className={classes.root}>
+        <Box className={classes.root}>
             <Container maxWidth="lg">
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -66,6 +65,6 @@ export default function () {
                     </Grid>
                 </Grid>
             </Container>
-        </div>
+        </Box>
     )
 }

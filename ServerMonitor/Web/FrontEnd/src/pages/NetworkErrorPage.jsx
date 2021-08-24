@@ -1,10 +1,10 @@
 import React from "react";
 import {Link, Typography} from "@material-ui/core";
 
-export default function ({error, callback}: { error: Error, callback: Function }) {
+export default function ({error, callback}: { error: Error, callback?: Function }) {
     function onClick(event) {
         event.preventDefault()
-        callback(event)
+        callback?.(event)
     }
 
     return (
