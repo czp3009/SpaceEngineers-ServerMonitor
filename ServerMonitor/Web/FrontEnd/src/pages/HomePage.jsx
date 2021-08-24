@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {Container, Grid, LinearProgress, makeStyles, Paper, Theme, Typography} from "@material-ui/core";
+import {Container, Grid, makeStyles, Paper, Theme, Typography} from "@material-ui/core";
 import type {ServerBasicInfo} from "../api/BasicInfoApi";
 import BasicInfoApi from "../api/BasicInfoApi";
 import MessageIcon from "@material-ui/icons/Message";
 import StorageIcon from "@material-ui/icons/Storage";
+import LoadingPage from "./LoadingPage";
+import NetworkErrorPage from "./NetworkErrorPage";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -15,16 +17,27 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export default function () {
+    const classes = useStyles()
     const [serverBasicInfo: ServerBasicInfo, setServerBasicInfo] = useState(null)
+    const [fetchError: Error, setFetchError] = useState(null)
+
+    function fetchData() {
+        setFetchError(null)
+        setServerBasicInfo(null)
+        BasicInfoApi.getBasicInfo().then(setServerBasicInfo).catch(setFetchError)
+    }
 
     useEffect(() => {
         if (serverBasicInfo != null) return
-        BasicInfoApi.getBasicInfo().then(it => setServerBasicInfo(it))
+        fetchData()
     }, [])
 
-    const classes = useStyles()
+    if (fetchError != null) {
+        return <NetworkErrorPage error={fetchError} callback={fetchData}/>
+    }
+
     if (serverBasicInfo == null) {
-        return (<LinearProgress/>)
+        return <LoadingPage/>
     }
 
     return (
