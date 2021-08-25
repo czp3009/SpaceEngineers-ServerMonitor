@@ -67,16 +67,16 @@ export default function (
     {
         serverBasicInfo,
         onServerBasicInfoChange
-    }: { serverBasicInfo?: ServerBasicInfo, onServerBasicInfoChange?: (ServerBasicInfo)=>{} }
+    }: { serverBasicInfo: ServerBasicInfo, onServerBasicInfoChange: (ServerBasicInfo)=>{} }
 ) {
-    const [loading, setLoading] = useState(serverBasicInfo == null)
+    const [loading, setLoading] = useState(false)
     const [fetchError: Error, setFetchError] = useState(null)
     const [fetchRetryEvent, setFetchRetryEvent] = useState(null)
 
     useEffect(() => {
         if (!loading) return
         BasicInfoApi.getBasicInfo()
-            .then(it => onServerBasicInfoChange?.(it))
+            .then(onServerBasicInfoChange)
             .catch(setFetchError)
             .finally(() => setLoading(false))
         return () => {

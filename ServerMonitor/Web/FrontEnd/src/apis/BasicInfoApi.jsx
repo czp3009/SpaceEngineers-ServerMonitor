@@ -4,7 +4,10 @@ export interface ServerBasicInfo {
     messageOfToday: string,
     isReady: boolean,
     players?: number,
-    sessionName?: string
+    sessionName?: string,
+    thirdPartyPluginSupport: {
+        lagGridBroadcasterPlugin: boolean
+    }
 }
 
 export default class {

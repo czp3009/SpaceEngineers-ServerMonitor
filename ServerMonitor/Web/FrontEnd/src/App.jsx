@@ -52,10 +52,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function UserInterface(
     {
-        sessionName,
         serverBasicInfo,
         onServerBasicInfoChange
-    }: { sessionName?: string, serverBasicInfo?: ServerBasicInfo, onServerBasicInfoChange?: (ServerBasicInfo)=>{} }
+    }: { serverBasicInfo: ServerBasicInfo, onServerBasicInfoChange: (ServerBasicInfo)=>{} }
 ) {
     const classes = useStyles()
     const [drawerOpened, setDrawerOpened] = useState(false)
@@ -72,7 +71,7 @@ function UserInterface(
                         <Link className={classes.barTitle} component={RouterLink} to="/"
                               onClick={() => setDrawerOpened(false)}>
                             <Typography variant="h6">
-                                {sessionName ?? "SpaceEngineers Server Monitor"}
+                                {serverBasicInfo.sessionName ?? "SpaceEngineers Server Monitor"}
                             </Typography>
                         </Link>
                     </Toolbar>
@@ -116,31 +115,13 @@ function UserInterface(
 }
 
 export default function () {
-    const [sessionName: string, setSessionName] = useState(localStorage.getItem("sessionName"))
     const [serverBasicInfo: ServerBasicInfo, setServerBasicInfo] = useState(null)
     const [fetchError: Error, setFetchError] = useState(null)
 
     useEffect(() => {
-        if (sessionName != null) {
-            document.title = sessionName
-            localStorage.setItem("sessionName", sessionName)
-        }
-    }, [sessionName])
-
-    function onServerBasicInfoChange(newServerBasicInfo: ServerBasicInfo) {
-        setServerBasicInfo(newServerBasicInfo)
-        if (newServerBasicInfo.sessionName != null) {
-            setSessionName(newServerBasicInfo.sessionName)
-        }
-    }
-
-    const userInterface = <UserInterface sessionName={sessionName} serverBasicInfo={serverBasicInfo}
-                                         onServerBasicInfoChange={onServerBasicInfoChange}/>
-
-    //sessionName exist in cache or changed after first render
-    if (sessionName != null) {
-        return userInterface
-    }
+        if (serverBasicInfo?.sessionName == null) return
+        document.title = serverBasicInfo.sessionName
+    }, [serverBasicInfo?.sessionName])
 
     //error occurred
     if (fetchError != null) {
@@ -151,13 +132,11 @@ export default function () {
         )
     }
 
-    //loading
+    //load server basic info before everything
     if (serverBasicInfo == null) {
-        BasicInfoApi.getBasicInfo()
-            .then(it => onServerBasicInfoChange(it))
-            .catch(setFetchError)
+        BasicInfoApi.getBasicInfo().then(setServerBasicInfo).catch(setFetchError)
         return <LinearProgress/>
     }
 
-    return userInterface
+    return <UserInterface serverBasicInfo={serverBasicInfo} onServerBasicInfoChange={setServerBasicInfo}/>
 }
