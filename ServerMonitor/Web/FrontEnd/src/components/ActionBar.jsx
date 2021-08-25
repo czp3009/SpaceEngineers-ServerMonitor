@@ -3,6 +3,7 @@ import {Box, Container, Divider, Grid, makeStyles, Theme, Typography} from "@mat
 
 const useStyles = makeStyles((theme: Theme) => ({
     actionBar: {
+        flexGrow: 1,
         borderBottom: "2px solid rgba(0, 0, 0, 0.12)"
     },
     icon: {
@@ -16,6 +17,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     subTitle: {
         margin: theme.spacing(1, 4, 1, 1)
+    },
+    children: {
+        display: "flex",
+        flexGrow: 1,
+        "& button": {
+            fontWeight: 550
+        }
     }
 }))
 
@@ -36,7 +44,9 @@ export default function (
                     <Typography className={classes.title} variant="h6">{title}</Typography>
                     <Divider className={classes.divide} orientation="vertical" flexItem/>
                     <Typography className={classes.subTitle} variant="h6">{subTitle}</Typography>
-                    {children}
+                    <Box className={classes.children}>
+                        {children}
+                    </Box>
                 </Grid>
             </Container>
         </Box>

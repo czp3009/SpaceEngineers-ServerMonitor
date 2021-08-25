@@ -11,7 +11,7 @@ namespace ServerMonitor.Web.BackEnd.Controller
 
         public async Task<object> GetLatestMeasureResult(HttpListenerRequest request)
         {
-            if (!Config.LagGridBroadcasterPluginSupport || !ThirdPartyPluginReference.LagGridBroadcasterPluginEnabled)
+            if (!Config.LagGridBroadcasterPluginAvailable)
             {
                 throw new HttpStatusException(HttpStatusCode.BadRequest, "LagGridBroadcaster not supported");
             }

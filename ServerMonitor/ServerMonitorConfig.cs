@@ -29,5 +29,8 @@ namespace ServerMonitor
             get => _lagGridBroadcasterPluginSupport;
             set => SetValue(ref _lagGridBroadcasterPluginSupport, value);
         }
+
+        public bool LagGridBroadcasterPluginAvailable =>
+            LagGridBroadcasterPluginSupport && LagGridBroadcasterPluginEnabled;
     }
 }

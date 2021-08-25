@@ -24,6 +24,8 @@ import NotFoundPage from "./pages/NotFoundPage";
 import AboutPage from "./pages/AboutPage";
 import type {ServerBasicInfo} from "./apis/BasicInfoApi";
 import BasicInfoApi from "./apis/BasicInfoApi";
+import TimelapseIcon from "@material-ui/icons/Timelapse";
+import LagGridBroadcasterPage from "./pages/LagGridBroadcasterPage";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -52,8 +54,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function UserInterface(
     {
-        serverBasicInfo,
-        onServerBasicInfoChange
+        serverBasicInfo: basicInfo,
+        onServerBasicInfoChange: onBasicInfoChange
     }: { serverBasicInfo: ServerBasicInfo, onServerBasicInfoChange: (ServerBasicInfo)=>{} }
 ) {
     const classes = useStyles()
@@ -71,7 +73,7 @@ function UserInterface(
                         <Link className={classes.barTitle} component={RouterLink} to="/"
                               onClick={() => setDrawerOpened(false)}>
                             <Typography variant="h6">
-                                {serverBasicInfo.sessionName ?? "SpaceEngineers Server Monitor"}
+                                {basicInfo.sessionName ?? "SpaceEngineers Server Monitor"}
                             </Typography>
                         </Link>
                     </Toolbar>
@@ -86,6 +88,15 @@ function UserInterface(
                             </ListItemIcon>
                             <ListItemText primary="Home"/>
                         </ListItem>
+                        {
+                            basicInfo.thirdPartyPluginSupport.lagGridBroadcasterPlugin &&
+                            <ListItem button component={RouterLink} to="/thirdParty/lagGridBroadcaster">
+                                <ListItemIcon>
+                                    <TimelapseIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="LagGridBroadcaster"/>
+                            </ListItem>
+                        }
                         <ListItem button component={RouterLink} to="/about">
                             <ListItemIcon>
                                 <HelpIcon/>
@@ -98,8 +109,10 @@ function UserInterface(
                 <main>
                     <Switch>
                         <Route path="/" exact>
-                            <HomePage serverBasicInfo={serverBasicInfo}
-                                      onServerBasicInfoChange={onServerBasicInfoChange}/>
+                            <HomePage serverBasicInfo={basicInfo} onServerBasicInfoChange={onBasicInfoChange}/>
+                        </Route>
+                        <Route path="/thirdParty/lagGridBroadcaster" exact>
+                            <LagGridBroadcasterPage/>
                         </Route>
                         <Route path="/about" exact>
                             <AboutPage/>

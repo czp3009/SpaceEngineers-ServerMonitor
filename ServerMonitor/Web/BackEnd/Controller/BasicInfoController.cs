@@ -17,7 +17,11 @@ namespace ServerMonitor.Web.BackEnd.Controller
                 messageOfToday = Config.MessageOfToday,
                 isReady = mySession?.Ready ?? false,
                 players = mySession?.Players.GetOnlinePlayers().Count(it => it.IsRealPlayer),
-                sessionName = mySession?.Name
+                sessionName = mySession?.Name,
+                thirdPartyPluginSupport = new
+                {
+                    lagGridBroadcasterPlugin = Config.LagGridBroadcasterPluginAvailable
+                }
             };
         }
     }
