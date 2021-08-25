@@ -145,7 +145,7 @@ export default function () {
     //error occurred
     if (fetchError != null) {
         return (
-            <Typography variant={"h6"}>
+            <Typography variant="h6">
                 Error: {fetchError.message}, please check your network and refresh this page.
             </Typography>
         )

@@ -1,4 +1,4 @@
-let isDev = process.env.NODE_ENV !== "production"
+const isDev = process.env.NODE_ENV !== "production"
 let baseUrl = "/apis"
 if (isDev) baseUrl = "http://localhost:5000/api"
 

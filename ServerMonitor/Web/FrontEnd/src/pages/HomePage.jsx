@@ -23,16 +23,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     actionBar: {
         borderBottom: "2px solid rgba(0, 0, 0, 0.12)",
         "& svg": {
-            margin: theme.spacing(1.5),
+            margin: theme.spacing(1),
         },
         "& h6": {
-            margin: theme.spacing(1.5),
+            margin: theme.spacing(1),
         },
         "& hr": {
-            margin: theme.spacing(0, 1.5),
+            margin: theme.spacing(0, 1),
         },
         "& .page-description": {
-            marginRight: theme.spacing(6)
+            marginRight: theme.spacing(4)
         }
     },
     content: {
@@ -90,33 +90,33 @@ export default function (
             <Container className={classes.actionBar} maxWidth={false}>
                 <Grid container alignItems="center">
                     <HomeOutlinedIcon/>
-                    <Typography variant={"h6"}>Home</Typography>
+                    <Typography variant="h6">Home</Typography>
                     <Divider orientation="vertical" flexItem/>
-                    <Typography className={"page-description"} variant={"h6"}>Server Basic Info</Typography>
-                    <Button color={"primary"} onClick={refresh}>Refresh</Button>
+                    <Typography className="page-description" variant="h6">Server Basic Info</Typography>
+                    <Button color="primary" onClick={refresh}>Refresh</Button>
                 </Grid>
             </Container>
             <Container className={classes.content} maxWidth="lg">
-                <Grid container spacing={2} direction={"column"}>
+                <Grid container spacing={2} direction="column">
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <Typography variant={"subtitle1"} className={classes.inlineIconAndText}>
+                            <Typography variant="subtitle1" className={classes.inlineIconAndText}>
                                 {/*TODO: grid layout inline*/}
                                 <StorageIcon/><span>Server info</span>{!serverBasicInfo.isReady &&
-                            <WarningRoundedIcon color={"secondary"}/>}
+                            <WarningRoundedIcon color="secondary"/>}
                             </Typography>
-                            <Typography variant={"body2"}>Is ready: {serverBasicInfo.isReady.toString()}</Typography>
-                            <Typography variant={"body2"}>Players: {serverBasicInfo.players ?? "N/A"}</Typography>
-                            <Typography variant={"body2"}>Session
+                            <Typography variant="body2">Is ready: {serverBasicInfo.isReady.toString()}</Typography>
+                            <Typography variant="body2">Players: {serverBasicInfo.players ?? "N/A"}</Typography>
+                            <Typography variant="body2">Session
                                 name: {serverBasicInfo.sessionName ?? "N/A"}</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <Typography variant={"subtitle1"} className={classes.inlineIconAndText}>
+                            <Typography variant="subtitle1" className={classes.inlineIconAndText}>
                                 <MessageIcon/> MOTD
                             </Typography>
-                            <Typography variant={"body2"}>{serverBasicInfo.messageOfToday}</Typography>
+                            <Typography variant="body2">{serverBasicInfo.messageOfToday}</Typography>
                         </Paper>
                     </Grid>
                 </Grid>
