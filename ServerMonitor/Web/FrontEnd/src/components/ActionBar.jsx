@@ -37,6 +37,7 @@ export default function (
 ) {
     const classes = useStyles()
     return (
+        // hide action button as ... if screen resize
         <Box className={classes.actionBar}>
             <Toolbar variant="dense" className={classes.toolBar}>
                 <Box display="flex" alignItems="center">
