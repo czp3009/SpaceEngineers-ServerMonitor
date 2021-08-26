@@ -1,26 +1,26 @@
 import React from "react";
-import {Box, Container, Divider, Grid, makeStyles, Theme, Typography} from "@material-ui/core";
+import {Box, Divider, makeStyles, Theme, Toolbar, Typography} from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) => ({
     actionBar: {
-        flexGrow: 1,
         borderBottom: "2px solid rgba(0, 0, 0, 0.12)"
     },
+    toolBar: {
+        flexWrap: "wrap"
+    },
     icon: {
-        margin: theme.spacing(1)
+        marginRight: theme.spacing(2)
     },
     title: {
-        margin: theme.spacing(1)
+        marginRight: theme.spacing(2)
     },
     divide: {
-        margin: theme.spacing(0, 1)
+        marginRight: theme.spacing(2)
     },
     subTitle: {
-        margin: theme.spacing(1, 4, 1, 1)
+        marginRight: theme.spacing(4)
     },
     children: {
-        display: "flex",
-        flexGrow: 1,
         "& button": {
             fontWeight: 550
         }
@@ -38,17 +38,17 @@ export default function (
     const classes = useStyles()
     return (
         <Box className={classes.actionBar}>
-            <Container maxWidth={false}>
-                <Grid container alignItems="center">
-                    <Box className={classes.icon}>{icon}</Box>
+            <Toolbar variant="dense" className={classes.toolBar}>
+                <Box display="flex" alignItems="center">
+                    <Box className={classes.icon} display="flex" alignItems="center">{icon}</Box>
                     <Typography className={classes.title} variant="h6">{title}</Typography>
                     <Divider className={classes.divide} orientation="vertical" flexItem/>
                     <Typography className={classes.subTitle} variant="h6">{subTitle}</Typography>
-                    <Box className={classes.children}>
-                        {children}
-                    </Box>
-                </Grid>
-            </Container>
+                </Box>
+                <Box className={classes.children} display="flex" flex="auto" alignItems="center">
+                    {children}
+                </Box>
+            </Toolbar>
         </Box>
     )
 }
