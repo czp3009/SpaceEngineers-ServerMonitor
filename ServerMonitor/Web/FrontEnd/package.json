@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "parcel public/index.html",
-    "jsonServer": "json-server --watch mock/rest.json --port 5000",
+    "jsonServer": "json-server --routes mock/routes.json --watch mock/rest.json --port 5000",
     "build": "parcel build public/index.html"
   }
 }
