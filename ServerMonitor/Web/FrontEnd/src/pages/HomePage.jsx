@@ -11,9 +11,6 @@ import ActionBar from "../components/ActionBar";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
 const useStyles = makeStyles((theme: Theme) => ({
-    content: {
-        paddingTop: theme.spacing(2)
-    },
     paper: {
         padding: theme.spacing(2)
     },
@@ -27,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 function Content({serverBasicInfo}: { serverBasicInfo: ServerBasicInfo }) {
     const classes = useStyles()
     return (
-        <Box className={classes.content}>
+        <Box paddingTop={2}>
             <Container maxWidth="lg">
                 <Grid container spacing={2} direction="column">
                     <Grid item xs={12}>

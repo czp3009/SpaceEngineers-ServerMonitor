@@ -28,17 +28,12 @@ import TimelapseIcon from "@material-ui/icons/Timelapse";
 import LagGridBroadcasterPage from "./pages/LagGridBroadcasterPage";
 
 const useStyles = makeStyles((theme: Theme) => ({
-    root: {
-        flexGrow: 1,
-    },
     bar: {
         zIndex: theme.zIndex.drawer + 1
     },
-    barIconButton: {
-        marginRight: theme.spacing(2),
-    },
     barTitle: {
         color: "white",
+        padding: theme.spacing(0, 1),
         "&:hover": {
             textDecoration: "none"
         }
@@ -63,19 +58,22 @@ function UserInterface(
 
     return (
         <Router>
-            <Box className={classes.root}>
+            <Box flexGrow={1}>
                 <AppBar className={classes.bar} position="sticky">
                     <Toolbar>
-                        <IconButton edge="start" className={classes.barIconButton} color="inherit"
-                                    onClick={() => setDrawerOpened(!drawerOpened)}>
-                            <MenuIcon/>
-                        </IconButton>
-                        <Link className={classes.barTitle} component={RouterLink} to="/"
-                              onClick={() => setDrawerOpened(false)}>
-                            <Typography variant="h6">
-                                {basicInfo.sessionName ?? "SpaceEngineers Server Monitor"}
-                            </Typography>
-                        </Link>
+                        <Box display="flex">
+                            <IconButton edge="start" color="inherit" onClick={() => setDrawerOpened(!drawerOpened)}>
+                                <MenuIcon/>
+                            </IconButton>
+                        </Box>
+                        <Box display="flex">
+                            <Link className={classes.barTitle} component={RouterLink} to="/"
+                                  onClick={() => setDrawerOpened(false)}>
+                                <Typography variant="h6" noWrap>
+                                    {basicInfo.sessionName ?? "SpaceEngineers Server Monitor"}
+                                </Typography>
+                            </Link>
+                        </Box>
                     </Toolbar>
                 </AppBar>
 

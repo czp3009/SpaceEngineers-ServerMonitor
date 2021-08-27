@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import ActionBar from "../components/ActionBar";
 import {Box, Button, Container, Grid, LinearProgress, makeStyles, Theme, Typography} from "@material-ui/core";
-import TimelapseIcon from "@material-ui/icons/Timelapse";
+import TimelapseOutlinedIcon from "@material-ui/icons/TimelapseOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import NetworkErrorPage from "./NetworkErrorPage";
 import type {MeasureResult} from "../apis/LagGridBroadcasterApi";
@@ -11,7 +11,6 @@ import BorderLinearProgress from "../components/BorderLinearProgress";
 
 const useStyles = makeStyles((theme: Theme) => ({
     content: {
-        paddingTop: theme.spacing(2),
         pointerEvents: props => props.loading ? "none" : "inherit",
         opacity: props => props.loading ? "0.2" : "inherit"
     }
@@ -25,7 +24,7 @@ function Content({loading, measureResult}: { loading: boolean, measureResult?: M
     const measureTime = new Date(measureResult.latestMeasureTime).toLocaleString()
 
     return (
-        <Box className={classes.content}>
+        <Box className={classes.content} paddingTop={2}>
             <Container maxWidth={false}>
                 {
                     measureResult.latestMeasureTime == null || measureResult.latestResults == null ?
@@ -104,11 +103,9 @@ export default function () {
 
     return (
         <Box>
-            <ActionBar icon={<TimelapseIcon/>} title="LagGridBroadcaster" subTitle="Grids Measurement">
+            <ActionBar icon={<TimelapseOutlinedIcon/>} title="LagGridBroadcaster" subTitle="Grids Measurement">
                 <Button startIcon={<RefreshIcon/>} color="primary" onClick={refresh}>Refresh</Button>
-                <Box display="flex" flex="auto" justifyContent="flex-end">
-                    <Button color="primary">Show Filter</Button>
-                </Box>
+                <Button color="primary" flexEnd={true}>Show Filter</Button>
             </ActionBar>
             {content}
         </Box>

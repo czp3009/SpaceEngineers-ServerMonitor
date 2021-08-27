@@ -4,8 +4,7 @@ import {Box, Container, Grid, Link, makeStyles, Theme, Typography} from "@materi
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
         "& h4": {
-            marginTop: theme.spacing(2),
-            marginBottom: theme.spacing(2)
+            margin: theme.spacing(2, 0)
         },
         "& p": {
             marginBottom: theme.spacing(2)

@@ -16,6 +16,7 @@
     "@material-ui/lab": "^4.0.0-alpha.60",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-intersection-observer": "^8.32.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0"
   },
