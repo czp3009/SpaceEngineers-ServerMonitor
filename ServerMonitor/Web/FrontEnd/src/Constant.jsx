@@ -1,9 +1,7 @@
-const isDev = process.env.NODE_ENV !== "production"
-let baseUrl = "/apis"
-if (isDev) baseUrl = "http://localhost:5000/api"
+const isProd = process.env.NODE_ENV === "production"
 
 export default class {
-    static isDev = isDev
+    static isDev = !isProd
 
-    static baseUrl = baseUrl
+    static baseUrl = isProd ? "/apis" : "http://localhost:5000/api"
 }

@@ -11,7 +11,9 @@ export interface ServerBasicInfo {
 }
 
 export default class {
-    static getBasicInfo(): Promise<ServerBasicInfo> {
-        return fetch(`${Constant.baseUrl}/basicInfo`).then(it => it.json())
+    static getBasicInfo(abortSignal?: AbortSignal, middleware?: (Response)=>Response): Promise<ServerBasicInfo> {
+        return fetch(`${Constant.baseUrl}/basicInfo`, {
+            signal: abortSignal
+        }).then(it => middleware?.(it) ?? it).then(it => it.json())
     }
 }

@@ -72,11 +72,13 @@ export default function () {
 
     useEffect(() => {
         if (!loading) return
-        LagGridBroadcasterApi.getLatestMeasureResult()
+        const abortController = new AbortController()
+        LagGridBroadcasterApi.getLatestMeasureResult(abortController.signal)
             .then(setMeasureResult)
             .catch(setFetchError)
             .finally(() => setLoading(false))
         return () => {
+            abortController.abort()
             setLoading(true)
             setFetchError(null)
         }

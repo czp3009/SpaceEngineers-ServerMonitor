@@ -147,7 +147,10 @@ export default function () {
 
     //load server basic info before everything
     if (serverBasicInfo == null) {
-        BasicInfoApi.getBasicInfo().then(setServerBasicInfo).catch(setFetchError)
+        BasicInfoApi.getBasicInfo(null, response => {
+            if (response.ok) return response
+            throw new Error(response.statusText)
+        }).then(setServerBasicInfo).catch(setFetchError)
         return <LinearProgress/>
     }
 

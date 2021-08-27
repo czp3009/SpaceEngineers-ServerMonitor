@@ -1,7 +1,7 @@
 import Constant from "../Constant";
 
 export interface MeasureResult {
-    latestMeasureTime?:Date,
+    latestMeasureTime?: Date,
     latestResults?: {
         entityId: number,
         entityDisplayName: string,
@@ -15,8 +15,9 @@ export interface MeasureResult {
 }
 
 export default class {
-    static getLatestMeasureResult(): Promise<MeasureResult> {
-        return fetch(`${Constant.baseUrl}/thirdParty/lagGridBroadcaster/latestMeasureResult`)
-            .then(it => it.json())
+    static getLatestMeasureResult(abortSignal?: AbortSignal, middleware?: (Response)=>Response): Promise<MeasureResult> {
+        return fetch(`${Constant.baseUrl}/thirdParty/lagGridBroadcaster/latestMeasureResult`, {
+            signal: abortSignal
+        }).then(it => middleware?.(it) ?? it).then(it => it.json())
     }
 }

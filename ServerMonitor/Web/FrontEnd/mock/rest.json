@@ -1,0 +1,14 @@
+{
+  "api": [
+    {
+      "id": "basicInfo",
+      "messageOfToday": "Welcome",
+      "isReady": true,
+      "players": 5,
+      "sessionName": "211 PVP",
+      "thirdPartyPluginSupport": {
+        "lagGridBroadcasterPlugin": true
+      }
+    }
+  ]
+}

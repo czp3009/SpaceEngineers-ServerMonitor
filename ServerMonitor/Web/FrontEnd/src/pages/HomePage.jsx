@@ -75,11 +75,13 @@ export default function (
 
     useEffect(() => {
         if (!loading) return
-        BasicInfoApi.getBasicInfo()
+        const abortController = new AbortController()
+        BasicInfoApi.getBasicInfo(abortController.signal)
             .then(onServerBasicInfoChange)
             .catch(setFetchError)
             .finally(() => setLoading(false))
         return () => {
+            abortController.abort()
             setLoading(true)
             setFetchError(null)
         }
