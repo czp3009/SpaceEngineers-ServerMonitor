@@ -9,6 +9,42 @@
       "thirdPartyPluginSupport": {
         "lagGridBroadcasterPlugin": true
       }
+    },
+    {
+      "id": "lagGridBroadcaster-latestMeasureResult",
+      "latestMeasureTime": "2021-08-27T12:17:59.7604092Z",
+      "latestResults": [
+        {
+          "entityId": 83591641984138374,
+          "entityDisplayName": "RoM Cruiser Bymir",
+          "mainThreadTimePerTick": 0.91509333333333331,
+          "playerIdentityId": 144115188075855897,
+          "playerSteamId": 76561198044500267,
+          "playerDisplayName": "czp",
+          "factionId": null,
+          "factionName": null
+        },
+        {
+          "entityId": 114641050721595856,
+          "entityDisplayName": "myship",
+          "mainThreadTimePerTick": 0.015778333333333332,
+          "playerIdentityId": 144115188075855897,
+          "playerSteamId": 76561198044500267,
+          "playerDisplayName": "czp",
+          "factionId": null,
+          "factionName": null
+        },
+        {
+          "entityId": 100645171920651655,
+          "entityDisplayName": "Static Grid 1655",
+          "mainThreadTimePerTick": 0.005156666666666667,
+          "playerIdentityId": 144115188075855897,
+          "playerSteamId": 76561198044500267,
+          "playerDisplayName": "czp",
+          "factionId": null,
+          "factionName": null
+        }
+      ]
     }
   ]
 }
