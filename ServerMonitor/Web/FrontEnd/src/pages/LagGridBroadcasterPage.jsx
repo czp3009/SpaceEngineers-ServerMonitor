@@ -16,7 +16,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }))
 
-function Content({loading, measureResult}: { loading: boolean, measureResult?: MeasureResult }) {
+function Content(
+    {loading, showFilter, measureResult}: { loading: boolean, showFilter: boolean, measureResult?: MeasureResult }
+) {
     const classes = useStyles({loading: measureResult?.latestMeasureTime != null && loading})
     if (measureResult == null || (measureResult.latestMeasureTime == null && loading)) return null
 
@@ -68,6 +70,7 @@ export default function () {
     const [measureResult, setMeasureResult] = useState(null)
     const [fetchError: Error, setFetchError] = useState(null)
     const [fetchRetryEvent, setFetchRetryEvent] = useState(null)
+    const [showFilter, setShowFilter] = useState(false)
 
     useEffect(() => {
         if (!loading) return
@@ -96,7 +99,7 @@ export default function () {
         content = (
             <>
                 {loading && <LinearProgress/>}
-                {measureResult && <Content loading={loading} measureResult={measureResult}/>}
+                {measureResult && <Content loading={loading} showFilter={showFilter} measureResult={measureResult}/>}
             </>
         )
     }
@@ -105,7 +108,9 @@ export default function () {
         <Box>
             <ActionBar icon={<TimelapseOutlinedIcon/>} title="LagGridBroadcaster" subTitle="Grids Measurement">
                 <Button startIcon={<RefreshIcon/>} color="primary" onClick={refresh}>Refresh</Button>
-                <Button color="primary" flexEnd={true}>Show Filter</Button>
+                <Button color="primary" flexEnd={true} onClick={() => setShowFilter(!showFilter)}>
+                    {showFilter ? "Hide Filter" : "Show Filter"}
+                </Button>
             </ActionBar>
             {content}
         </Box>
