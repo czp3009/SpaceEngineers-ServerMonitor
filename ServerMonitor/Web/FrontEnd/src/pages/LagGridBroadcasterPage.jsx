@@ -58,8 +58,7 @@ function Content(
     const [orderBy, setOrderBy] = useQueryParam("orderBy", withDefault(StringParam, "time"))
     if (measureResult == null || (measureResult.latestMeasureTime == null && loading)) return null
 
-    const totalMainThreadTimePerTick = measureResult.latestResults.reduce((acc, current) => acc + current.mainThreadTimePerTick, 0)
-    const measureTime = new Date(measureResult.latestMeasureTime).toLocaleString()
+    const totalMainThreadTimePerTick = measureResult.latestResults?.reduce((acc, current) => acc + current.mainThreadTimePerTick, 0)
 
     //copy and order measureResult
     const latestResults = measureResult.latestResults?.slice()
@@ -86,7 +85,8 @@ function Content(
                         <Grid container direction="column" spacing={4}>
                             <Grid item xs={12}>
                                 <Typography>
-                                    <strong>Last measure time:</strong> {measureTime}
+                                    <strong>Last measure time:</strong>
+                                    {new Date(measureResult.latestMeasureTime).toLocaleString()}
                                 </Typography>
                             </Grid>
                             <Grid container item xs={12} direction="column">
