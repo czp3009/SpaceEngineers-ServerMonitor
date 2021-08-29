@@ -18,7 +18,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
 import HelpIcon from "@material-ui/icons/Help";
 import React, {useEffect, useState} from "react";
-import {BrowserRouter as Router, Link as RouterLink, Route, Switch} from "react-router-dom";
+import {Link as RouterLink, Route, Switch} from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import AboutPage from "./pages/AboutPage";
@@ -57,72 +57,70 @@ function UserInterface(
     const [drawerOpened, setDrawerOpened] = useState(false)
 
     return (
-        <Router>
-            <Box flexGrow={1}>
-                <AppBar className={classes.bar} position="sticky">
-                    <Toolbar>
-                        <Box display="flex">
-                            <IconButton edge="start" color="inherit" onClick={() => setDrawerOpened(!drawerOpened)}>
-                                <MenuIcon/>
-                            </IconButton>
-                        </Box>
-                        <Box display="flex">
-                            <Link className={classes.barTitle} component={RouterLink} to="/"
-                                  onClick={() => setDrawerOpened(false)}>
-                                <Typography variant="h6" noWrap>
-                                    {basicInfo.sessionName ?? "SpaceEngineers Server Monitor"}
-                                </Typography>
-                            </Link>
-                        </Box>
-                    </Toolbar>
-                </AppBar>
+        <Box flexGrow={1}>
+            <AppBar className={classes.bar} position="sticky">
+                <Toolbar>
+                    <Box display="flex">
+                        <IconButton edge="start" color="inherit" onClick={() => setDrawerOpened(!drawerOpened)}>
+                            <MenuIcon/>
+                        </IconButton>
+                    </Box>
+                    <Box display="flex">
+                        <Link className={classes.barTitle} component={RouterLink} to="/"
+                              onClick={() => setDrawerOpened(false)}>
+                            <Typography variant="h6" noWrap>
+                                {basicInfo.sessionName ?? "SpaceEngineers Server Monitor"}
+                            </Typography>
+                        </Link>
+                    </Box>
+                </Toolbar>
+            </AppBar>
 
-                <Drawer className={classes.drawer} anchor="left" open={drawerOpened}
-                        onClose={() => setDrawerOpened(false)}>
-                    <Toolbar/>
-                    <List className={classes.drawerList} onClick={() => setDrawerOpened(false)}>
-                        <ListItem button component={RouterLink} to="/">
+            <Drawer className={classes.drawer} anchor="left" open={drawerOpened}
+                    onClose={() => setDrawerOpened(false)}>
+                <Toolbar/>
+                <List className={classes.drawerList} onClick={() => setDrawerOpened(false)}>
+                    <ListItem button component={RouterLink} to="/">
+                        <ListItemIcon>
+                            <HomeIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Home"/>
+                    </ListItem>
+                    {
+                        basicInfo.thirdPartyPluginSupport.lagGridBroadcasterPlugin &&
+                        <ListItem button component={RouterLink} to="/thirdParty/lagGridBroadcaster">
                             <ListItemIcon>
-                                <HomeIcon/>
+                                <TimelapseIcon/>
                             </ListItemIcon>
-                            <ListItemText primary="Home"/>
+                            <ListItemText primary="LagGridBroadcaster"/>
                         </ListItem>
-                        {
-                            basicInfo.thirdPartyPluginSupport.lagGridBroadcasterPlugin &&
-                            <ListItem button component={RouterLink} to="/thirdParty/lagGridBroadcaster">
-                                <ListItemIcon>
-                                    <TimelapseIcon/>
-                                </ListItemIcon>
-                                <ListItemText primary="LagGridBroadcaster"/>
-                            </ListItem>
-                        }
-                        <ListItem button component={RouterLink} to="/about">
-                            <ListItemIcon>
-                                <HelpIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="About"/>
-                        </ListItem>
-                    </List>
-                </Drawer>
+                    }
+                    <ListItem button component={RouterLink} to="/about">
+                        <ListItemIcon>
+                            <HelpIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="About"/>
+                    </ListItem>
+                </List>
+            </Drawer>
 
-                <main>
-                    <Switch>
-                        <Route path="/" exact>
-                            <HomePage serverBasicInfo={basicInfo} onServerBasicInfoChange={onBasicInfoChange}/>
-                        </Route>
-                        <Route path="/thirdParty/lagGridBroadcaster" exact>
-                            <LagGridBroadcasterPage/>
-                        </Route>
-                        <Route path="/about" exact>
-                            <AboutPage/>
-                        </Route>
-                        <Route>
-                            <NotFoundPage/>
-                        </Route>
-                    </Switch>
-                </main>
-            </Box>
-        </Router>
+            <main>
+                <Switch>
+                    <Route path="/" exact>
+                        <HomePage serverBasicInfo={basicInfo} onServerBasicInfoChange={onBasicInfoChange}/>
+                    </Route>
+                    <Route path="/thirdParty/lagGridBroadcaster" exact>
+                        <LagGridBroadcasterPage/>
+                    </Route>
+                    <Route path="/about" exact>
+                        <AboutPage/>
+                    </Route>
+                    <Route>
+                        <NotFoundPage/>
+                    </Route>
+                </Switch>
+            </main>
+        </Box>
     )
 }
 

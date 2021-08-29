@@ -4,10 +4,16 @@ import {
     Box,
     Button,
     Container,
+    Drawer,
+    FormControl,
     Grid,
+    InputLabel,
     LinearProgress,
     makeStyles,
+    MenuItem,
+    Select,
     Theme,
+    Toolbar,
     Typography,
     withStyles
 } from "@material-ui/core";
@@ -17,6 +23,12 @@ import NetworkErrorPage from "./NetworkErrorPage";
 import type {MeasureResult} from "../apis/LagGridBroadcasterApi";
 import LagGridBroadcasterApi from "../apis/LagGridBroadcasterApi";
 import Alert from "@material-ui/lab/Alert";
+import ToolbarWithBottomBorder from "../components/ToolbarWithBottomBorder";
+import {BooleanParam, StringParam, useQueryParam, withDefault} from "use-query-params";
+import stringComparer from "../utils/stringComparer";
+
+//constants
+const filterWidth = 300
 
 const BorderLinearProgress = withStyles((theme) => ({
     root: {
@@ -32,7 +44,7 @@ const BorderLinearProgress = withStyles((theme) => ({
     },
 }))(LinearProgress)
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useContentStyles = makeStyles((theme: Theme) => ({
     content: {
         pointerEvents: props => props.loading ? "none" : "inherit",
         opacity: props => props.loading ? "0.2" : "inherit"
@@ -40,19 +52,36 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 function Content(
-    {loading, showFilter, measureResult}: { loading: boolean, showFilter: boolean, measureResult?: MeasureResult }
+    {loading, measureResult}: { loading: boolean, measureResult?: MeasureResult }
 ) {
-    const classes = useStyles({loading: measureResult?.latestMeasureTime != null && loading})
+    const classes = useContentStyles({loading: measureResult?.latestMeasureTime != null && loading})
+    const [orderBy, setOrderBy] = useQueryParam("orderBy", withDefault(StringParam, "time"))
     if (measureResult == null || (measureResult.latestMeasureTime == null && loading)) return null
 
     const totalMainThreadTimePerTick = measureResult.latestResults.reduce((acc, current) => acc + current.mainThreadTimePerTick, 0)
     const measureTime = new Date(measureResult.latestMeasureTime).toLocaleString()
 
+    //copy and order measureResult
+    const latestResults = measureResult.latestResults?.slice()
+    if (latestResults != null) {
+        switch (orderBy) {
+            case "faction":
+                latestResults.sort((a, b) => stringComparer(a.factionName, b.factionName))
+                break
+            case "player":
+                latestResults.sort((a, b) => stringComparer(a.playerDisplayName, b.playerDisplayName))
+                break
+            case "time" :
+                latestResults.sort((a, b) => b.mainThreadTimePerTick - a.mainThreadTimePerTick)
+                break
+        }
+    }
+
     return (
         <Box className={classes.content} paddingTop={2}>
             <Container maxWidth={false}>
                 {
-                    measureResult.latestMeasureTime == null || measureResult.latestResults == null ?
+                    measureResult.latestMeasureTime == null || latestResults == null ?
                         <Alert severity="error">No data! The server has not run measure command yet.</Alert> :
                         <Grid container direction="column" spacing={4}>
                             <Grid item xs={12}>
@@ -61,7 +90,7 @@ function Content(
                                 </Typography>
                             </Grid>
                             <Grid container item xs={12} direction="column">
-                                {measureResult.latestResults.map(result => {
+                                {latestResults.map(result => {
                                     const progress = result.mainThreadTimePerTick / totalMainThreadTimePerTick * 100
                                     const owner = result.factionName != null ? `[${result.factionName}]` : "" + result.playerDisplayName
                                     return (
@@ -92,12 +121,29 @@ function Content(
     )
 }
 
+function FilterContent({measureResult}: { measureResult: MeasureResult }) {
+    const [orderBy, setOrderBy] = useQueryParam("orderBy", withDefault(StringParam, "time"))
+
+    return (
+        <Box display="flex" flexDirection="column" flex="auto" padding={2}>
+            <FormControl variant="outlined">
+                <InputLabel>OrderBy</InputLabel>
+                <Select value={orderBy} onChange={event => setOrderBy(event.target.value)} label="OrderBy">
+                    <MenuItem value="time">Time</MenuItem>
+                    <MenuItem value="player">Player</MenuItem>
+                    <MenuItem value="faction">Faction</MenuItem>
+                </Select>
+            </FormControl>
+        </Box>
+    )
+}
+
 export default function () {
     const [loading, setLoading] = useState(true)
     const [measureResult, setMeasureResult] = useState(null)
     const [fetchError: Error, setFetchError] = useState(null)
     const [fetchRetryEvent, setFetchRetryEvent] = useState(null)
-    const [showFilter, setShowFilter] = useState(false)
+    const [showFilter, setShowFilter] = useQueryParam("filter", BooleanParam);
 
     useEffect(() => {
         if (!loading) return
@@ -126,20 +172,46 @@ export default function () {
         content = (
             <>
                 {loading && <LinearProgress/>}
-                {measureResult && <Content loading={loading} showFilter={showFilter} measureResult={measureResult}/>}
+                {measureResult && <Content loading={loading} measureResult={measureResult}/>}
             </>
         )
     }
 
     return (
         <Box>
-            <ActionBar icon={<TimelapseOutlinedIcon/>} title="LagGridBroadcaster" subTitle="Grids Measurement">
-                <Button startIcon={<RefreshIcon/>} color="primary" onClick={refresh}>Refresh</Button>
-                <Button color="primary" flexEnd={true} onClick={() => setShowFilter(!showFilter)}>
-                    {showFilter ? "Hide Filter" : "Show Filter"}
-                </Button>
-            </ActionBar>
-            {content}
+            <Box display="flex" flexDirection="column" flex="auto"
+                 maxWidth={showFilter ? `calc(100% - ${filterWidth}px)` : "100%"}>
+                <ActionBar icon={<TimelapseOutlinedIcon/>} title="LagGridBroadcaster" subTitle="Grids Measurement">
+                    <Button startIcon={<RefreshIcon/>} color="primary" onClick={refresh}>
+                        Refresh
+                    </Button>
+                    {
+                        !showFilter &&
+                        <Button color="primary" flexEnd={true} onClick={() => setShowFilter(!showFilter)}>
+                            Show Filter
+                        </Button>
+                    }
+                </ActionBar>
+                {content}
+            </Box>
+            <Drawer variant="persistent" anchor="right" open={showFilter} transitionDuration={0}>
+                <Toolbar/>
+                <ToolbarWithBottomBorder variant="dense" disableGutters>
+                    <Box display="flex" flexDirection="row" flex="auto" alignItems="center" paddingX={2}>
+                        <Box display="flex" flex="auto" alignItems="center">
+                            <Typography variant="h6" noWrap>Filter</Typography>
+                        </Box>
+                        <Box display="flex" justifyContent="flex-end" alignItems="center">
+                            <Button color="primary" style={{fontWeight: 550}} onClick={() => setShowFilter(false)}>
+                                Hide Filter
+                            </Button>
+                        </Box>
+                    </Box>
+                </ToolbarWithBottomBorder>
+                <Box width={filterWidth}>
+                    {measureResult == null ? <LinearProgress/> : <FilterContent measureResult={measureResult}/>}
+                </Box>
+            </Drawer>
         </Box>
     )
 }

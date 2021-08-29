@@ -16,8 +16,8 @@
       "latestResults": [
         {
           "entityId": 83591641984138374,
-          "entityDisplayName": "RoM Cruiser Bymir",
-          "mainThreadTimePerTick": 0.91509333333333331,
+          "entityDisplayName": "MyShip1",
+          "mainThreadTimePerTick": 0.5,
           "playerIdentityId": 144115188075855897,
           "playerSteamId": 76561198044500267,
           "playerDisplayName": "czp",
@@ -26,8 +26,8 @@
         },
         {
           "entityId": 114641050721595856,
-          "entityDisplayName": "myship",
-          "mainThreadTimePerTick": 0.015778333333333332,
+          "entityDisplayName": "MyShip2",
+          "mainThreadTimePerTick": 0.4,
           "playerIdentityId": 144115188075855897,
           "playerSteamId": 76561198044500267,
           "playerDisplayName": "czp",
@@ -36,11 +36,11 @@
         },
         {
           "entityId": 100645171920651655,
-          "entityDisplayName": "Static Grid 1655",
-          "mainThreadTimePerTick": 0.005156666666666667,
+          "entityDisplayName": "Player1's Ship",
+          "mainThreadTimePerTick": 0.45,
           "playerIdentityId": 144115188075855897,
           "playerSteamId": 76561198044500267,
-          "playerDisplayName": "czp",
+          "playerDisplayName": "player1",
           "factionId": null,
           "factionName": null
         }
