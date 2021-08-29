@@ -40,10 +40,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     drawer: {
         zIndex: `${theme.zIndex.drawer} !important`,
+        flexShrink: 1
     },
     drawerList: {
-        width: 250,
-        paddingTop: theme.mixins.toolbar.minHeight + theme.spacing(2)
+        width: 250
     }
 }))
 
@@ -79,6 +79,7 @@ function UserInterface(
 
                 <Drawer className={classes.drawer} anchor="left" open={drawerOpened}
                         onClose={() => setDrawerOpened(false)}>
+                    <Toolbar/>
                     <List className={classes.drawerList} onClick={() => setDrawerOpened(false)}>
                         <ListItem button component={RouterLink} to="/">
                             <ListItemIcon>
