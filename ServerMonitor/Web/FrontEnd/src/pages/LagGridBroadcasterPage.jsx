@@ -1,13 +1,36 @@
 import React, {useEffect, useState} from "react";
 import ActionBar from "../components/ActionBar";
-import {Box, Button, Container, Grid, LinearProgress, makeStyles, Theme, Typography} from "@material-ui/core";
+import {
+    Box,
+    Button,
+    Container,
+    Grid,
+    LinearProgress,
+    makeStyles,
+    Theme,
+    Typography,
+    withStyles
+} from "@material-ui/core";
 import TimelapseOutlinedIcon from "@material-ui/icons/TimelapseOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import NetworkErrorPage from "./NetworkErrorPage";
 import type {MeasureResult} from "../apis/LagGridBroadcasterApi";
 import LagGridBroadcasterApi from "../apis/LagGridBroadcasterApi";
 import Alert from "@material-ui/lab/Alert";
-import BorderLinearProgress from "../components/BorderLinearProgress";
+
+const BorderLinearProgress = withStyles((theme) => ({
+    root: {
+        height: 20,
+        borderRadius: 5,
+    },
+    colorPrimary: {
+        backgroundColor: theme.palette.grey[theme.palette.type === "light" ? 200 : 700],
+    },
+    bar: {
+        borderRadius: 5,
+        backgroundColor: "#1a90ff",
+    },
+}))(LinearProgress)
 
 const useStyles = makeStyles((theme: Theme) => ({
     content: {
@@ -31,28 +54,32 @@ function Content(
                 {
                     measureResult.latestMeasureTime == null || measureResult.latestResults == null ?
                         <Alert severity="error">No data! The server has not run measure command yet.</Alert> :
-                        <Grid container spacing={4} direction="column">
+                        <Grid container direction="column" spacing={4}>
                             <Grid item xs={12}>
                                 <Typography>
                                     <strong>Last measure time:</strong> {measureTime}
                                 </Typography>
                             </Grid>
-                            <Grid container spacing={2} item xs={12} direction="column">
+                            <Grid container item xs={12} direction="column">
                                 {measureResult.latestResults.map(result => {
                                     const progress = result.mainThreadTimePerTick / totalMainThreadTimePerTick * 100
                                     const owner = result.factionName != null ? `[${result.factionName}]` : "" + result.playerDisplayName
                                     return (
                                         <Grid item xs={12} key={result.entityId}>
-                                            <Typography>
-                                                {result.entityDisplayName}({owner})
-                                            </Typography>
-                                            <Box display="flex" alignItems="center">
-                                                <Box flex="auto">
-                                                    <BorderLinearProgress variant="determinate" value={progress}/>
-                                                </Box>
-                                                <Typography style={{minWidth: 60, marginLeft: 8}}>
-                                                    {(result.mainThreadTimePerTick * 1000).toFixed(0)} µs
+                                            <Box display="flex" flexDirection="column" paddingY={1}>
+                                                <Typography>
+                                                    {result.entityDisplayName}({owner})
                                                 </Typography>
+                                                <Box display="flex" alignItems="center">
+                                                    <Box flex="auto" mr={1}>
+                                                        <BorderLinearProgress variant="determinate" value={progress}/>
+                                                    </Box>
+                                                    <Box>
+                                                        <Typography color="textSecondary">
+                                                            {(result.mainThreadTimePerTick * 1000).toFixed(0)}µs
+                                                        </Typography>
+                                                    </Box>
+                                                </Box>
                                             </Box>
                                         </Grid>
                                     )
