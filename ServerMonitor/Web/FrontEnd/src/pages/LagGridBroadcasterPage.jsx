@@ -185,12 +185,9 @@ export default function () {
                     <Button startIcon={<RefreshIcon/>} color="primary" onClick={refresh}>
                         Refresh
                     </Button>
-                    {
-                        !showFilter &&
-                        <Button color="primary" flexEnd={true} onClick={() => setShowFilter(!showFilter)}>
-                            Show Filter
-                        </Button>
-                    }
+                    <Button color="primary" flexEnd={true} onClick={() => setShowFilter(!showFilter)}>
+                        {showFilter ? "Hide Filter" : "Show Filter"}
+                    </Button>
                 </ActionBar>
                 {content}
             </Box>
