@@ -63,10 +63,17 @@ export default function (
         left.concat(right).forEach(it => it.show = false)
         const buttonAreaWidth = toolBarWidth - (titleRef.current?.clientWidth ?? 0) - (subTitleRef.current?.clientWidth ?? 0) - (moreIconRef.current?.clientWidth ?? 0)
         //calculate with element can show
+        const showOrderArray = right.reverse().concat(left)
         let buttonTotalWidth = 0
-        for (const element of right.reverse().concat(left)) {
+        for (const [index, element] of showOrderArray.entries()) {
             buttonTotalWidth += element.width
-            if (buttonTotalWidth > buttonAreaWidth) break
+            if (buttonTotalWidth > buttonAreaWidth) {
+                //at least one element need to be hidden, but no MoreIcon now
+                if (moreIconRef.current == null && index !== 0 && buttonTotalWidth - element.width + 48 > buttonAreaWidth) {
+                    showOrderArray[index - 1].show = false
+                }
+                break
+            }
             element.show = true
         }
         setLeftElementWrappers(left)
@@ -75,13 +82,14 @@ export default function (
 
     return (
         <ToolbarWithBottomBorder ref={toolBarRef} variant="dense">
-            <Box ref={titleRef} pr={4} display="flex" alignItems="center" borderRight="1px solid rgba(0, 0, 0, 0.12)">
+            <Box ref={titleRef} pr={4} display={{"xs": "none", "sm": "flex"}} alignItems="center"
+                 borderRight="1px solid rgba(0, 0, 0, 0.12)">
                 {icon}
                 <Box pl={{"xs": 1, "sm": 2}}>
                     <Typography variant="h6" noWrap>{title}</Typography>
                 </Box>
             </Box>
-            <Box ref={subTitleRef} pl={{"xs": 1, "sm": 2}} pr={{"xs": 1, "sm": 4}} display="flex" alignItems="center">
+            <Box ref={subTitleRef} pl={{"xs": 0, "sm": 2}} pr={{"xs": 1, "sm": 3}} display="flex" alignItems="center">
                 <Typography variant="h6" noWrap>{subTitle}</Typography>
             </Box>
             <Box className={classes.buttonArea} display="flex" flex="auto" alignItems="center">
@@ -91,23 +99,23 @@ export default function (
                 <Box display="flex" alignItems="center" justifyContent="flex-end">
                     {
                         leftElementWrappers.concat(rightElementWrappers).some(it => !it.show) &&
-                        <IconButton ref={moreIconRef} color="inherit"
+                        <IconButton ref={moreIconRef} color="primary"
                                     onClick={event => setAnchorEl(event.currentTarget)}>
                             <MoreVertIcon/>
                         </IconButton>
                     }
                     {rightElementWrappers.filter(it => it.show).map(it => it.element)}
                 </Box>
+                <Menu anchorEl={anchorEl} keepMounted open={anchorEl != null}
+                      onClose={() => setAnchorEl(null)} onClick={() => setAnchorEl(null)}>
+                    {
+                        leftElementWrappers.reverse().concat(rightElementWrappers).reverse().filter(it => !it.show).map(({element}) => {
+                            const {children, onClick} = element.props
+                            return <MenuItem key={element.key ?? children} onClick={onClick}>{children}</MenuItem>
+                        })
+                    }
+                </Menu>
             </Box>
-            <Menu anchorEl={anchorEl} keepMounted open={anchorEl != null}
-                  onClose={() => setAnchorEl(null)} onClick={() => setAnchorEl(null)}>
-                {
-                    leftElementWrappers.reverse().concat(rightElementWrappers).reverse().filter(it => !it.show).map(({element}) => {
-                        const {children, onClick} = element.props
-                        return <MenuItem key={element.key ?? children} onClick={onClick}>{children}</MenuItem>
-                    })
-                }
-            </Menu>
         </ToolbarWithBottomBorder>
     )
 }
