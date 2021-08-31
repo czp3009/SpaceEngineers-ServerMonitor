@@ -114,8 +114,10 @@ function Content(
                                 <Grid container direction="column" spacing={4}>
                                     <Grid item xs={12}>
                                         <Typography>
-                                            <strong>Last measure time:</strong>
-                                            {new Date(measureResult.latestMeasureTime).toLocaleString()}
+                                            <strong>Last measure time: </strong>
+                                            <span style={{whiteSpace: "nowrap"}}>
+                                                {new Date(measureResult.latestMeasureTime).toLocaleString()}
+                                            </span>
                                         </Typography>
                                     </Grid>
                                     <Grid container item xs={12} direction="column">
