@@ -100,14 +100,17 @@ export default function (
                     {
                         leftElementWrappers.concat(rightElementWrappers).some(it => !it.show) &&
                         <IconButton ref={moreIconRef} color="primary"
+                                    edge={rightElementWrappers.every(it => !it.show) ? "end" : false}
                                     onClick={event => setAnchorEl(event.currentTarget)}>
                             <MoreVertIcon/>
                         </IconButton>
                     }
                     {rightElementWrappers.filter(it => it.show).map(it => it.element)}
                 </Box>
-                <Menu anchorEl={anchorEl} keepMounted open={anchorEl != null}
-                      onClose={() => setAnchorEl(null)} onClick={() => setAnchorEl(null)}>
+                <Menu anchorOrigin={{vertical: "bottom", horizontal: "center"}} keepMounted transitionDuration={0}
+                      anchorEl={anchorEl} open={anchorEl != null} onClose={() => setAnchorEl(null)}
+                      getContentAnchorEl={null}
+                      onClick={() => setAnchorEl(null)}>
                     {
                         leftElementWrappers.reverse().concat(rightElementWrappers).reverse().filter(it => !it.show).map(({element}) => {
                             const {children, onClick} = element.props
