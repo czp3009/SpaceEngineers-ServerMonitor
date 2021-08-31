@@ -4,6 +4,7 @@ import {
     Box,
     Button,
     Container,
+    Divider,
     FormControl,
     FormGroup,
     Grid,
@@ -24,7 +25,8 @@ import type {MeasureResult} from "../apis/LagGridBroadcasterApi";
 import LagGridBroadcasterApi from "../apis/LagGridBroadcasterApi";
 import Alert from "@material-ui/lab/Alert";
 import {BooleanParam, StringParam, useQueryParam, withDefault} from "use-query-params";
-import compareString from "../utils/compareString"
+
+const selectMenuProps = {anchorOrigin: {vertical: "top", horizontal: "center"}, getContentAnchorEl: null}
 
 const BorderLinearProgress = withStyles((theme) => ({
     root: {
@@ -41,14 +43,19 @@ const BorderLinearProgress = withStyles((theme) => ({
 }))(LinearProgress)
 
 const useContentStyles = makeStyles((theme: Theme) => ({
+    root: {
+        display: "flex",
+        flexDirection: "row",
+        flex: "auto",
+        pointerEvents: props => props.loading ? "none" : "inherit",
+        opacity: props => props.loading ? "0.2" : "inherit"
+    },
     content: {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         flex: "auto",
-        paddingTop: theme.spacing(2),
-        pointerEvents: props => props.loading ? "none" : "inherit",
-        opacity: props => props.loading ? "0.2" : "inherit"
+        paddingTop: theme.spacing(2)
     },
     filter: {
         display: "flex",
@@ -68,6 +75,10 @@ const useContentStyles = makeStyles((theme: Theme) => ({
         whiteSpace: "nowrap",
         marginRight: theme.spacing(2),
         marginBottom: theme.spacing(2)
+    },
+    inMenuDivider: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1)
     }
 }))
 
@@ -76,34 +87,27 @@ function Content(
 ) {
     const classes = useContentStyles({loading: measureResult?.latestMeasureTime != null && loading})
     const [showFilter, setShowFilter] = useQueryParam("filter", withDefault(BooleanParam, false))
-    const [orderBy, setOrderBy] = useQueryParam("orderBy", withDefault(StringParam, "time"))
+    const [groupBy, setGroupBy] = useQueryParam("groupBy", withDefault(StringParam, "none"))
     const downXs = useMediaQuery(theme => theme.breakpoints.down("xs"))
+
+    //still loading
     if (measureResult == null || (measureResult.latestMeasureTime == null && loading)) return null
 
+    //if no data yet, this var may be null
     const totalMainThreadTimePerTick = measureResult.latestResults?.reduce((acc, current) => acc + current.mainThreadTimePerTick, 0)
 
-    //copy and order measureResult
+    //copy and sort measureResult
     const latestResults = measureResult.latestResults?.slice()
     if (latestResults != null) {
-        switch (orderBy) {
-            case "faction":
-                latestResults.sort((a, b) => compareString(a.factionName, b.factionName))
-                break
-            case "player":
-                latestResults.sort((a, b) => compareString(a.playerDisplayName, b.playerDisplayName))
-                break
-            case "time" :
-                latestResults.sort((a, b) => b.mainThreadTimePerTick - a.mainThreadTimePerTick)
-                break
-        }
+        latestResults.sort((a, b) => b.mainThreadTimePerTick - a.mainThreadTimePerTick)
     }
 
     function resetFilter() {
-        setOrderBy(undefined)
+        setGroupBy(undefined)
     }
 
     return (
-        <Box display="flex" flexDirection="row" flex="auto">
+        <Box className={classes.root}>
             {
                 (!downXs || !showFilter) &&
                 <Box className={classes.content}>
@@ -155,11 +159,13 @@ function Content(
                 showFilter &&
                 <Box className={classes.filter}>
                     <FormControl className={classes.filterFormControl} variant="outlined" fullWidth size="small">
-                        <InputLabel>OrderBy</InputLabel>
-                        <Select value={orderBy} onChange={event => setOrderBy(event.target.value)} label="OrderBy">
-                            <MenuItem value="time">Time</MenuItem>
+                        <InputLabel id="groupBy">Group by</InputLabel>
+                        <Select MenuProps={selectMenuProps} label="groupBy" value={groupBy}
+                                onChange={event => setGroupBy(event.target.value)}>
                             <MenuItem value="player">Player</MenuItem>
                             <MenuItem value="faction">Faction</MenuItem>
+                            <Divider className={classes.inMenuDivider}/>
+                            <MenuItem value="none">No grouping</MenuItem>
                         </Select>
                     </FormControl>
                     <FormGroup row>
