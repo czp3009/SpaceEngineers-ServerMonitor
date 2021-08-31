@@ -99,7 +99,7 @@ export default function (
     }
 
     return (
-        <Box>
+        <Box display="flex" flexDirection="column" flex="auto">
             <ActionBar icon={<HomeOutlinedIcon/>} title="Home" subTitle="Server Basic Info">
                 <Button startIcon={<RefreshIcon/>} color="primary" onClick={refresh}>Refresh</Button>
             </ActionBar>

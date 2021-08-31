@@ -16,7 +16,7 @@ export default function () {
     const classes = useStyles()
 
     return (
-        <Box className={classes.root}>
+        <Box className={classes.root} display="flex" flexDirection="column" flex="auto">
             <Container>
                 <Typography variant="h4">Space Engineers Server Monitor</Typography>
                 <Typography>

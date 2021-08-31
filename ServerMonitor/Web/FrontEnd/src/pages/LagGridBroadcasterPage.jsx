@@ -103,7 +103,7 @@ function Content(
     }
 
     return (
-        <Box display="flex" flexDirection="row">
+        <Box display="flex" flexDirection="row" flex="auto">
             {
                 (!downXs || !showFilter) &&
                 <Box className={classes.content}>
@@ -226,18 +226,16 @@ export default function () {
     }
 
     return (
-        <Box>
-            <Box display="flex" flexDirection="column" flex="auto">
-                <ActionBar icon={<TimelapseOutlinedIcon/>} title="LagGridBroadcaster" subTitle="Grids Measurement">
-                    <Button startIcon={<RefreshIcon/>} color="primary" onClick={refresh}>
-                        Refresh
-                    </Button>
-                    <Button color="primary" flexEnd={true} onClick={toggleFilter}>
-                        {showFilter ? "Hide Filter" : "Show Filter"}
-                    </Button>
-                </ActionBar>
-                {content}
-            </Box>
+        <Box display="flex" flexDirection="column" flex="auto">
+            <ActionBar icon={<TimelapseOutlinedIcon/>} title="LagGridBroadcaster" subTitle="Grids Measurement">
+                <Button startIcon={<RefreshIcon/>} color="primary" onClick={refresh}>
+                    Refresh
+                </Button>
+                <Button color="primary" flexEnd={true} onClick={toggleFilter}>
+                    {showFilter ? "Hide Filter" : "Show Filter"}
+                </Button>
+            </ActionBar>
+            {content}
         </Box>
     )
 }

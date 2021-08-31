@@ -60,7 +60,7 @@ function UserInterface(
     const [drawerOpened, setDrawerOpened] = useState(false)
 
     return (
-        <Box flexGrow={1}>
+        <Box display="flex" flexDirection="column" height="100vh">
             <AppBar className={classes.bar} position="sticky">
                 <Toolbar>
                     <Box display="flex">
@@ -107,22 +107,20 @@ function UserInterface(
                 </List>
             </Drawer>
 
-            <main>
-                <Switch>
-                    <Route path="/" exact>
-                        <HomePage serverBasicInfo={basicInfo} onServerBasicInfoChange={onBasicInfoChange}/>
-                    </Route>
-                    <Route path="/thirdParty/lagGridBroadcaster" exact>
-                        <LagGridBroadcasterPage/>
-                    </Route>
-                    <Route path="/about" exact>
-                        <AboutPage/>
-                    </Route>
-                    <Route>
-                        <NotFoundPage/>
-                    </Route>
-                </Switch>
-            </main>
+            <Switch>
+                <Route path="/" exact>
+                    <HomePage serverBasicInfo={basicInfo} onServerBasicInfoChange={onBasicInfoChange}/>
+                </Route>
+                <Route path="/thirdParty/lagGridBroadcaster" exact>
+                    <LagGridBroadcasterPage/>
+                </Route>
+                <Route path="/about" exact>
+                    <AboutPage/>
+                </Route>
+                <Route>
+                    <NotFoundPage/>
+                </Route>
+            </Switch>
         </Box>
     )
 }
