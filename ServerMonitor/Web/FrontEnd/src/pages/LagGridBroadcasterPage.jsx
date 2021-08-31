@@ -103,7 +103,7 @@ function Content(
     }
 
     return (
-        <Box display="flex" flexDirection="row" alignItems="flex-start">
+        <Box display="flex" flexDirection="row">
             {
                 (!downXs || !showFilter) &&
                 <Box className={classes.content}>
