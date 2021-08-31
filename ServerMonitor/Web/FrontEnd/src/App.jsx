@@ -42,8 +42,11 @@ const useStyles = makeStyles((theme: Theme) => ({
         zIndex: `${theme.zIndex.drawer} !important`,
         flexShrink: 1
     },
-    drawerList: {
-        width: 250
+    drawerPaper: {
+        width: 250,
+        [theme.breakpoints.down("xs")]: {
+            width: "100%"
+        }
     }
 }))
 
@@ -76,10 +79,10 @@ function UserInterface(
                 </Toolbar>
             </AppBar>
 
-            <Drawer className={classes.drawer} anchor="left" open={drawerOpened}
-                    onClose={() => setDrawerOpened(false)}>
+            <Drawer classes={{root: classes.drawer, paper: classes.drawerPaper}} anchor="left"
+                    open={drawerOpened} onClose={() => setDrawerOpened(false)}>
                 <Toolbar/>
-                <List className={classes.drawerList} onClick={() => setDrawerOpened(false)}>
+                <List onClick={() => setDrawerOpened(false)}>
                     <ListItem button component={RouterLink} to="/">
                         <ListItemIcon>
                             <HomeIcon/>
