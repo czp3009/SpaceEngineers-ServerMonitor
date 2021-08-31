@@ -78,7 +78,7 @@ export default function (
         }
         setLeftElementWrappers(left)
         setRightElementWrappers(right)
-    }, [toolBarWidth])
+    }, [toolBarWidth, firstTimeRender])
 
     return (
         <ToolbarWithBottomBorder ref={toolBarRef} variant="dense">
