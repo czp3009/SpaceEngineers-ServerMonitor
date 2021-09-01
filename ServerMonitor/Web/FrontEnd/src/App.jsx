@@ -25,7 +25,9 @@ import AboutPage from "./pages/AboutPage";
 import type {ServerBasicInfo} from "./apis/BasicInfoApi";
 import BasicInfoApi from "./apis/BasicInfoApi";
 import TimelapseIcon from "@material-ui/icons/Timelapse";
-import LagGridBroadcasterPage from "./pages/LagGridBroadcasterPage";
+import LinearProgressSuspense from "./components/LinearProgressSuspense";
+
+const LagGridBroadcasterPage = React.lazy(() => import("./pages/LagGridBroadcasterPage"))
 
 const useStyles = makeStyles((theme: Theme) => ({
     bar: {
@@ -112,7 +114,9 @@ function UserInterface(
                     <HomePage serverBasicInfo={basicInfo} onServerBasicInfoChange={onBasicInfoChange}/>
                 </Route>
                 <Route path="/thirdParty/lagGridBroadcaster" exact>
-                    <LagGridBroadcasterPage/>
+                    <LinearProgressSuspense>
+                        <LagGridBroadcasterPage/>
+                    </LinearProgressSuspense>
                 </Route>
                 <Route path="/about" exact>
                     <AboutPage/>
