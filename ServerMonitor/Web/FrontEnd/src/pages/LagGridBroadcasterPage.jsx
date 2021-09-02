@@ -97,7 +97,7 @@ function ResultItem({result, progress, totalMainThreadTimePerTick, unit}) {
         unitDefinition = unitTable[unit]
     }
     time = (time * unitDefinition.multiple).toFixed(unitDefinition.fractionDigits)
-    timeUnit = unitDefinition.display ?? timeUnit
+    timeUnit = unitDefinition.display ?? unit
 
     return (
         <Box display="flex" flexDirection="column" paddingY={1}>
