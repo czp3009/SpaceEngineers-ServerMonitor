@@ -25,8 +25,36 @@ import type {MeasureResult} from "../apis/LagGridBroadcasterApi";
 import LagGridBroadcasterApi from "../apis/LagGridBroadcasterApi";
 import Alert from "@material-ui/lab/Alert";
 import {BooleanParam, StringParam, useQueryParam, withDefault} from "use-query-params";
+import withValidDefault from "../queryParamConfigs/withValidDefault";
 
 const selectMenuProps = {anchorOrigin: {vertical: "top", horizontal: "center"}, getContentAnchorEl: null}
+const unitTable = {
+    ns: {
+        lowerBound: 0,
+        upperBound: 0.001,
+        multiple: 1000 * 1000,
+        fractionDigits: 0
+    },
+    us: {
+        lowerBound: 0.001,
+        upperBound: 1,
+        multiple: 1000,
+        fractionDigits: 0,
+        display: "μs"
+    },
+    ms: {
+        lowerBound: 1,
+        upperBound: 1000,
+        multiple: 1,
+        fractionDigits: 0
+    },
+    s: {
+        lowerBound: 1000,
+        upperBound: Number.MAX_VALUE,
+        multiple: 0.001,
+        fractionDigits: 2
+    }
+}
 
 const BorderLinearProgress = withStyles((theme) => ({
     root: {
@@ -41,6 +69,54 @@ const BorderLinearProgress = withStyles((theme) => ({
         backgroundColor: "#1a90ff",
     },
 }))(LinearProgress)
+
+function ResultItem({result, progress, totalMainThreadTimePerTick, unit}) {
+    if (progress == null) {
+        if (totalMainThreadTimePerTick == null) {
+            progress = 0
+        } else {
+            progress = result.mainThreadTimePerTick / totalMainThreadTimePerTick * 100
+        }
+    }
+    const owner = result.factionName != null ? `[${result.factionName}]` : "" + result.playerDisplayName
+
+    //format time
+    //mainThreadTimePerTick is in ms
+    let time = result.mainThreadTimePerTick
+    let timeUnit = "ms"
+    let unitDefinition = unitTable[timeUnit]
+    if (unit === "auto") {
+        for (const [key, value] of Object.entries(unitTable)) {
+            if (time >= value.lowerBound && time < value.upperBound) {
+                timeUnit = key
+                unitDefinition = unitTable[key]
+                break
+            }
+        }
+    } else {
+        unitDefinition = unitTable[unit]
+    }
+    time = (time * unitDefinition.multiple).toFixed(unitDefinition.fractionDigits)
+    timeUnit = unitDefinition.display ?? timeUnit
+
+    return (
+        <Box display="flex" flexDirection="column" paddingY={1}>
+            <Typography>
+                {result.entityDisplayName}({owner})
+            </Typography>
+            <Box display="flex" alignItems="center">
+                <Box flex="auto" mr={1}>
+                    <BorderLinearProgress variant="determinate" value={progress}/>
+                </Box>
+                <Box>
+                    <Typography color="textSecondary">
+                        {time}{timeUnit}
+                    </Typography>
+                </Box>
+            </Box>
+        </Box>
+    )
+}
 
 const useContentStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -87,7 +163,8 @@ function Content(
 ) {
     const classes = useContentStyles({loading: measureResult?.latestMeasureTime != null && loading})
     const [showFilter, setShowFilter] = useQueryParam("filter", withDefault(BooleanParam, false))
-    const [groupBy, setGroupBy] = useQueryParam("groupBy", withDefault(StringParam, "none"))
+    const [groupBy, setGroupBy] = useQueryParam("groupBy", withValidDefault(StringParam, "none", ["player", "faction"]))
+    const [unit, setUnit] = useQueryParam("unit", withValidDefault(StringParam, "auto", ["s", "ms", "us", "ns"]))   //μ cause compare issue
     const downXs = useMediaQuery(theme => theme.breakpoints.down("xs"))
 
     //still loading
@@ -104,6 +181,7 @@ function Content(
 
     function resetFilter() {
         setGroupBy(undefined)
+        setUnit(undefined)
     }
 
     return (
@@ -125,30 +203,13 @@ function Content(
                                         </Typography>
                                     </Grid>
                                     <Grid container item xs={12} direction="column">
-                                        {latestResults.map(result => {
-                                            const progress = result.mainThreadTimePerTick / totalMainThreadTimePerTick * 100
-                                            const owner = result.factionName != null ? `[${result.factionName}]` : "" + result.playerDisplayName
-                                            return (
-                                                <Grid item xs={12} key={result.entityId}>
-                                                    <Box display="flex" flexDirection="column" paddingY={1}>
-                                                        <Typography>
-                                                            {result.entityDisplayName}({owner})
-                                                        </Typography>
-                                                        <Box display="flex" alignItems="center">
-                                                            <Box flex="auto" mr={1}>
-                                                                <BorderLinearProgress variant="determinate"
-                                                                                      value={progress}/>
-                                                            </Box>
-                                                            <Box>
-                                                                <Typography color="textSecondary">
-                                                                    {(result.mainThreadTimePerTick * 1000).toFixed(0)}µs
-                                                                </Typography>
-                                                            </Box>
-                                                        </Box>
-                                                    </Box>
-                                                </Grid>
-                                            )
-                                        })}
+                                        {latestResults.map(result =>
+                                            <Grid item xs={12} key={result.entityId}>
+                                                <ResultItem result={result}
+                                                            totalMainThreadTimePerTick={totalMainThreadTimePerTick}
+                                                            unit={unit}/>
+                                            </Grid>
+                                        )}
                                     </Grid>
                                 </Grid>
                         }
@@ -166,6 +227,18 @@ function Content(
                             <MenuItem value="faction">Faction</MenuItem>
                             <Divider className={classes.inMenuDivider}/>
                             <MenuItem value="none">No grouping</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl className={classes.filterFormControl} variant="outlined" fullWidth size="small">
+                        <InputLabel id="unit">Unit</InputLabel>
+                        <Select MenuProps={selectMenuProps} label="unit" value={unit}
+                                onChange={event => setUnit(event.target.value)}>
+                            <MenuItem value="s">Second</MenuItem>
+                            <MenuItem value="ms">Millisecond</MenuItem>
+                            <MenuItem value="us">Microsecond</MenuItem>
+                            <MenuItem value="ns">Nanosecond</MenuItem>
+                            <Divider className={classes.inMenuDivider}/>
+                            <MenuItem value="auto">Auto</MenuItem>
                         </Select>
                     </FormControl>
                     <FormGroup row>
