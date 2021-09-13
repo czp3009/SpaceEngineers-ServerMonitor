@@ -19,15 +19,15 @@ import HomeIcon from "@material-ui/icons/Home";
 import HelpIcon from "@material-ui/icons/Help";
 import React, {useEffect, useState} from "react";
 import {Link as RouterLink, Route, Switch} from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import NotFoundPage from "./pages/NotFoundPage";
-import AboutPage from "./pages/AboutPage";
+import HomePage from "./pages/home/HomePage";
+import NotFoundPage from "./pages/error/NotFoundPage";
+import AboutPage from "./pages/about/AboutPage";
 import type {ServerBasicInfo} from "./apis/BasicInfoApi";
 import BasicInfoApi from "./apis/BasicInfoApi";
 import TimelapseIcon from "@material-ui/icons/Timelapse";
 import LinearProgressSuspense from "./components/LinearProgressSuspense";
 
-const LagGridBroadcasterPage = React.lazy(() => import("./pages/LagGridBroadcasterPage"))
+const LagGridBroadcasterPage = React.lazy(() => import("./pages/thirdPartyPlugins/lagGridBroadcaster/LagGridBroadcasterPage"))
 
 const useStyles = makeStyles((theme: Theme) => ({
     bar: {
