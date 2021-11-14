@@ -4,7 +4,7 @@ import ToolbarWithBottomBorder from "./ToolbarWithBottomBorder";
 import useResizeObserver from "use-resize-observer";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
     buttonArea: {
         "& button": {
             whiteSpace: "nowrap",
@@ -31,7 +31,7 @@ export default function (
     const subTitleRef = useRef()
     const moreIconRef = useRef()
 
-    //put button to correct area, this hook should only run once
+    //put button to correct area, this hook should only run once unless children changed
     useEffect(() => {
         const left = []
         const right = []

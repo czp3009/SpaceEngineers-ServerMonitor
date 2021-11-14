@@ -35,8 +35,7 @@ namespace ServerMonitor
         public override void Dispose()
         {
             base.Dispose();
-            _httpServer?.Stop();
-            Log.Info("HttpServer stoped");
+            StopHttpServer();
         }
 
         public void SaveConfig()
