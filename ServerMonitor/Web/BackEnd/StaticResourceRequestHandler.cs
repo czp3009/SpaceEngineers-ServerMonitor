@@ -10,7 +10,7 @@ namespace ServerMonitor.Web.BackEnd
 {
     public class StaticResourceRequestHandler : IRequestHandler
     {
-        private static readonly Dictionary<string, string> MimeTable = new Dictionary<string, string>()
+        private static readonly Dictionary<string, string> MimeTable = new Dictionary<string, string>
         {
             { "html", "text/html" },
             { "js", "application/x-javascript" },

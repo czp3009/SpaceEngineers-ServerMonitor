@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using ServerMonitor.Web.BackEnd.HttpException;
+
+#pragma warning disable 1998
 
 namespace ServerMonitor.Web.BackEnd.Controller
 {
@@ -9,6 +12,7 @@ namespace ServerMonitor.Web.BackEnd.Controller
     {
         private static ServerMonitorConfig Config => ServerMonitorPlugin.Instance.Config;
 
+        [SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Global")]
         public async Task<object> GetLatestMeasureResult(HttpListenerRequest request)
         {
             if (!Config.LagGridBroadcasterPluginAvailable)

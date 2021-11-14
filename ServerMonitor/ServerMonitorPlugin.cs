@@ -25,6 +25,7 @@ namespace ServerMonitor
             Instance = this;
             LoadConfig();
             StartHttpServer();
+            Log.Info("Plugin loaded");
         }
 
         public UserControl GetControl()
@@ -36,6 +37,7 @@ namespace ServerMonitor
         {
             base.Dispose();
             StopHttpServer();
+            Log.Info("Plugin unloaded");
         }
 
         public void SaveConfig()
@@ -64,7 +66,7 @@ namespace ServerMonitor
         {
             var configFilePath = Path.Combine(StoragePath, $"{Name}.cfg");
             _persistent = Persistent<ServerMonitorConfig>.Load(configFilePath);
-            Log.Info("Confifuration loaded");
+            Log.Info("Configuration loaded");
         }
 
         private void StartHttpServer()

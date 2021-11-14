@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace ServerMonitor.Web.BackEnd.Model
 {
     // ReSharper disable MemberCanBePrivate.Global
     public class HttpResponse
     {
-        public readonly HttpStatusCode code;
-        public readonly string message;
+        [JsonProperty("code")] public readonly HttpStatusCode Code;
+
+        [JsonProperty("message")] public readonly string Message;
 
         public HttpResponse(HttpStatusCode code, string message)
         {
-            this.code = code;
-            this.message = message;
+            Code = code;
+            Message = message;
         }
 
         public HttpResponse(HttpStatusCode code, Exception exception) : this(code, exception.Message)
